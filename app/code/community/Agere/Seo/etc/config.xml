@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Agere_Seo>
+			<version>0.1.6</version>
+		</Agere_Seo>
+	</modules>
+
+	<global>
+
+		<blocks>
+			<agere_seo>
+				<class>Agere_Seo_Block</class>
+			</agere_seo>
+		</blocks>
+
+		<helpers>
+			<agere_seo>
+				<class>Agere_Seo_Helper</class>
+			</agere_seo>
+			<!--<mana_core>
+				<rewrite>
+					<data>Agere_Seo_Helper_Mana</data>
+				</rewrite>
+			</mana_core>-->
+			<catalog>
+				<rewrite>
+					<product_compare>Agere_Seo_Helper_Product_Compare</product_compare>
+				</rewrite>
+			</catalog>
+		</helpers>
+
+		<models>
+			<agere_seo>
+				<class>Agere_Seo_Model</class>
+				<resourceModel>agere_seo_resource</resourceModel>
+			</agere_seo>
+			<agere_seo_resource>
+				<class>Agere_Seo_Model_Resource</class>
+				<entities>
+					<rule>
+						<table>agere_seo_rule</table>
+					</rule>
+					<seoblock>
+						<table>agere_seo_block</table>
+					</seoblock>
+				</entities>
+			</agere_seo_resource>
+			<!--<core>
+				<rewrite>
+					<url>Agere_Seo_Model_Url</url>
+				</rewrite>
+			</core>-->
+			<core>
+				<rewrite>
+					<store>Agere_Seo_Model_Store</store>
+				</rewrite>
+			</core>
+
+
+			<!--<manapro_filterseolinks>
+				<class>ManaPro_FilterSeoLinks_Model</class>
+				<resourceModel>manapro_filterseolinks_resources</resourceModel>
+			</manapro_filterseolinks>
+			<core>
+				<rewrite>
+					<url>ManaPro_FilterSeoLinks_Model_Url</url>
+					<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>
+					<store>ManaPro_FilterSeoLinks_Model_Store</store>
+				</rewrite>
+			</core>-->
+		</models>
+
+		<resources>
+			<agere_seo_setup>
+				<setup>
+					<module>Agere_Seo</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</agere_seo_setup>
+		</resources>
+
+		<events>
+			<controller_action_layout_render_before_catalog_category_view> <!-- this name is really important, use this to indicate the layout-render-before event -->
+				<observers>
+					<agere_seo_meta_tags_observer>
+						<type>singleton</type>
+						<class>Agere_Seo_Model_Observer</class>
+						<method>hookToChangeMetaTags</method>
+					</agere_seo_meta_tags_observer>
+				</observers>
+			</controller_action_layout_render_before_catalog_category_view>
+			<controller_action_layout_render_before_catalog_product_view>
+				<observers>
+					<agere_seo_meta_tags_observer>
+						<type>singleton</type>
+						<class>Agere_Seo_Model_Observer</class>
+						<method>hookToChangeMetaTags</method>
+					</agere_seo_meta_tags_observer>
+				</observers>
+			</controller_action_layout_render_before_catalog_product_view>
+			<controller_action_predispatch>
+				<observers>
+					<agere_seo_predispatch_observer>
+						<type>singleton</type>
+						<class>Agere_Seo_Model_Observer</class>
+						<method>controllerActionPredispatch</method>
+					</agere_seo_predispatch_observer>
+				</observers>
+			</controller_action_predispatch>
+			<controller_action_layout_generate_blocks_after>
+				<observers>
+					<agere_seo_postdispatch_observer>
+						<type>singleton</type>
+						<class>Agere_Seo_Model_Observer</class>
+						<method>hookAfterGenerateBlocks</method>
+					</agere_seo_postdispatch_observer>
+				</observers>
+			</controller_action_layout_generate_blocks_after>
+			<controller_action_layout_render_before_cms_index_index>
+				<observers>
+					<agere_seo_cms_observer>
+						<type>singleton</type>
+						<class>Agere_Seo_Model_Observer</class>
+						<method>hookTo8080Port</method>
+					</agere_seo_cms_observer>
+				</observers>
+			</controller_action_layout_render_before_cms_index_index>
+		</events>
+
+	</global>
+
+	<frontend>
+		<routers>
+			<agere_seo>
+				<use>standard</use>
+				<args>
+					<module>Agere_Seo</module>
+					<frontName>seo</frontName>
+				</args>
+			</agere_seo>
+		</routers>
+
+		<layout>
+			<updates>
+				<agere_seo>
+					<file>agere/seo.xml</file>
+				</agere_seo>
+			</updates>
+		</layout>
+
+		<translate>
+			<modules>
+				<Agere_Seo>
+					<files>
+						<default>Agere_Seo.csv</default>
+					</files>
+				</Agere_Seo>
+			</modules>
+		</translate>
+	</frontend>
+
+	<!-- is important place this code (<adminhtml/>) in config.xml if you wand place this in adminhtml.xml nothing happen -->
+	<adminhtml>
+		<layout>
+			<updates>
+				<agere_seo>
+					<!--
+					We again keep a nice naming convention and make our module upgrade proof by placing it in a separate folder
+					- Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
+					-->
+					<file>agere/seo.xml</file>
+				</agere_seo>
+			</updates>
+		</layout>
+	</adminhtml>
+
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<agere_seo before="Mage_Adminhtml">Agere_Seo_Adminhtml</agere_seo>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+
+	<agere_seo_filterlinks>
+		<noindex>
+			<empty translate="title" module="agere_seo">
+				<title></title>
+				<model>agere_seo/filterLinks_noindex_empty</model>
+			</empty>
+			<several_filters translate="title" module="agere_seo">
+				<title>2 or more filters applied</title>
+				<model>agere_seo/filterLinks_noindex_filters</model>
+			</several_filters>
+			<several_options translate="title" module="agere_seo">
+				<title>2 or more options in the same filter applied</title>
+				<model>agere_seo/filterLinks_noindex_options</model>
+			</several_options>
+			<slider translate="title" module="agere_seo">
+				<title>Slider filter applied</title>
+				<model>agere_seo/filterLinks_noindex_slider</model>
+			</slider>
+			<any translate="title" module="agere_seo">
+				<title>Any filter applied</title>
+				<model>agere_seo/filterLinks_noindex_any</model>
+			</any>
+		</noindex>
+		<index>
+			<empty translate="title" module="agere_seo">
+				<title></title>
+				<model>agere_seo/filterLinks_index_empty</model>
+				<rule></rule>
+			</empty>
+			<onebrand translate="title" module="agere_seo">
+				<title>1 brand filter applied</title>
+				<model>agere_seo/filterLinks_index_filters</model>
+				<rule>1 brand</rule>
+			</onebrand>
+			<walker translate="title" module="agere_seo">
+				<title>1 walker filter applied</title>
+				<model>agere_seo/filterLinks_index_filters</model>
+				<rule>1 walker</rule>
+			</walker>
+			<oneitemtype translate="title" module="agere_seo">
+				<title>1 item_type filter applied</title>
+				<model>agere_seo/filterLinks_index_filters</model>
+				<rule>1 item_type</rule>
+			</oneitemtype>
+			<onebrand_oneitemtype translate="title" module="agere_seo">
+				<title>1 brand and 1 item_type filters applied</title>
+				<model>agere_seo/filterLinks_index_filters</model>
+				<rule>1 brand + 1 item_type</rule>
+			</onebrand_oneitemtype>
+		</index>
+	</agere_seo_filterlinks>
+
+</config>

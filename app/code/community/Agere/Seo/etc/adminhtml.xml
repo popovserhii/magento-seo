@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<config>
+	<menu>
+		<agere_seo translate="title" module="agere_seo">
+			<title>Seo</title>
+			<sort_order>71</sort_order>
+
+			<children>
+				<agere_seo_meta translate="title" module="agere_seo">
+					<title>Meta Tags</title>
+					<action>adminhtml/meta/index</action>
+					<sort_order>10</sort_order>
+				</agere_seo_meta>
+				<agere_seo_block translate="title" module="agere_seo">
+					<title>Seo Block</title>
+					<action>adminhtml/seoBlock/index</action>
+					<sort_order>20</sort_order>
+				</agere_seo_block>
+			</children>
+
+		</agere_seo>
+	</menu>
+
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+
+			<admin>
+				<children>
+
+					<system>
+						<children>
+							<config>
+								<children>
+									<agere_section translate="title" module="agere_seo">
+										<title>SEO Configuration</title>
+										<sort_order>100</sort_order>
+									</agere_section>
+								</children>
+							</config>
+						</children>
+					</system>
+
+					<agere_seo translate="title" module="agere_seo">
+						<title>Seo</title>
+						<children>
+							<agere_seo_meta translate="title" module="agere_seo">
+								<title>Meta Tags</title>
+								<sort_order>10</sort_order>
+							</agere_seo_meta>
+							<agere_seo_block translate="title" module="agere_seo">
+								<title>Seo Block</title>
+								<sort_order>20</sort_order>
+							</agere_seo_block>
+						</children>
+					</agere_seo>
+
+				</children>
+			</admin>
+
+		</resources>
+	</acl>
+</config>

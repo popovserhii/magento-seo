@@ -10,7 +10,7 @@
     "extra": {
         "map": [
           ["app/etc/modules/Popov_Seo.xml", "app/etc/modules/Popov_Seo.xml"],
-          ["app/code/community/Popov/Seo/", "app/code/community/Popov/Seo/"],
+          ["app/code/community/Popov/Seo/", "app/code/community/Popov/Seo/"]
         ]
     }
 }

@@ -1,0 +1,16 @@
+{
+    "name": "popov/magento-seo",
+    "type": "magento-module",
+    "license":"MIT Licence",
+    "description":"Advanced SEO Module for Magento",
+    "authors":[{
+        "name":"Serhii Popov",
+        "email":"popow.serhii@gmail.com"
+    }],
+    "extra": {
+        "map": [
+          ["app/etc/modules/Popov_Seo.xml", "app/etc/modules/Popov_Seo.xml"],
+          ["app/code/community/Popov/Seo/", "app/code/community/Popov/Seo/"],
+        ]
+    }
+}

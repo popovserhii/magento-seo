@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Popov_Seo>
+			<active>true</active>
+			<codePool>community</codePool>
+			<depends>
+                <Popov_Base />
+				<!--<ManaPro_FilterSeoLinks />-->
+            </depends>
+		</Popov_Seo>
+	</modules>
+</config>

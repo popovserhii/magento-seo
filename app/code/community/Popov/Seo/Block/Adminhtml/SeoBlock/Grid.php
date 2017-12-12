@@ -2,9 +2,9 @@
 /**
  * Enter description here...
  *
- * @category Agere
- * @package Agere_<package>
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @category Popov
+ * @package Popov_<package>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 16.10.14 12:56
  */
 

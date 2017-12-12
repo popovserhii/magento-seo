@@ -2,9 +2,9 @@
 /**
  * Grid block
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 26.06.15 13:32
  */
 class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Grid {
@@ -14,7 +14,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Gr
 
 		// set some defaults for our grid
 		$this->setDefaultSort('id');
-		$this->setId('agere_meta_grid');
+		$this->setId('popov_meta_grid');
 		$this->setDefaultDir('ASC');
 		$this->setSaveParametersInSession(true);
 	}

@@ -2,9 +2,9 @@
 /**
  * SEO default helper
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 20.04.14 14:54
  */ 
 class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
@@ -12,9 +12,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getSeoName() {
 		static $seoName = '';
 
-		/** @var Agere_Base_Helper_String $stringHelper */
+		/** @var Popov_Base_Helper_String $stringHelper */
 		if (!$seoName) {
-			$stringHelper = Mage::helper('agere_base/string');
+			$stringHelper = Mage::helper('popov_base/string');
 			$moduleName = Mage::app()->getRequest()->getModuleName();
 			$fullActionName = Mage::app()->getFrontController()->getAction()->getFullActionName();
 			$actionName = str_replace($moduleName . '_', '', $fullActionName);
@@ -51,6 +51,8 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 		#RewriteRule     ^index.php/admin/(.*)$   	http://%{HTTP_HOST}/en/$1    	[R=301,NC,L]    # Permanent Move
 		$list = array(
 			'^/index.php/admin/(.*)$' => "http://{$_SERVER['HTTP_HOST']}/en/$1",
+			'(.*)/mode/list$' => "http://{$_SERVER['HTTP_HOST']}/$1",
+			'(.*)/mode/grid$' => "http://{$_SERVER['HTTP_HOST']}/$1",
 		);
 
 		foreach ($list as $from => $to) {
@@ -65,7 +67,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function redirectTrailingSlash() {
-		if (Mage::getStoreConfig('agere_section/settings/trailing_slash')) {
+		if (Mage::getStoreConfig('popov_section/settings/trailing_slash')) {
 			$currentUrl = Mage::helper('core/url')->getCurrentUrl();
 			if ($_SERVER['REQUEST_METHOD'] != 'POST' && !Mage::app()->getRequest()->isAjax()) {
 				/* if this need than check search
@@ -89,7 +91,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * Redirect uppercase url to lowercase
 	 */
 	public function redirectToLowerCase() {
-		if (Mage::getStoreConfig('agere_section/settings/to_lowercase') && $this->isCheckedModule()) {
+		if (Mage::getStoreConfig('popov_section/settings/to_lowercase') && $this->isCheckedModule()) {
 			/** @var Mage_Core_Model_Url $url */
 			$url = Mage::getModel('core/url');
 			$url->parseUrl(Mage::helper('core/url')->getCurrentUrl());
@@ -105,7 +107,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function redirectMultipleSlashes() {
-		if (Mage::getStoreConfig('agere_section/settings/multiple_slashes') && preg_match('#[/]{2,}#', $_SERVER['REQUEST_URI'])) {
+		if (Mage::getStoreConfig('popov_section/settings/multiple_slashes') && preg_match('#[/]{2,}#', $_SERVER['REQUEST_URI'])) {
 			$parts = array_filter(explode('/', $_SERVER['REQUEST_URI']));
 			$url = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), '/');
 			
@@ -127,9 +129,10 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function redirectWithoutStore() {
 		if (Mage::getStoreConfig('web/url/use_store')
 			&& $this->isCheckedModule()
-			&& Mage::getStoreConfig('agere_section/settings/without_store')
-			&& !Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
-
+			&& Mage::getStoreConfig('popov_section/settings/without_store')
+			//&& !Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
+			&& !$this->isHomePage()) {
+			
 			$requestUri = trim(rawurldecode($_SERVER['REQUEST_URI']), '/');
 			$parts = explode('/', $requestUri);
 			$storeDefault = Mage::app()->getStore(Mage::app()->getWebsite()->getDefaultGroup()->getDefaultStoreId());
@@ -144,7 +147,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function redirectNonSecureUrl() {
-		if (Mage::getStoreConfig('agere_section/settings/non_secure_url') && $this->isCheckedModule()) {
+		if (Mage::getStoreConfig('popov_section/settings/non_secure_url') && $this->isCheckedModule()) {
 			$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https' : 'http';
 			if ($protocol === 'https') {
 				$url = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
@@ -156,7 +159,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function redirectFirstPage() {
-		if (Mage::getStoreConfig('agere_section/settings/first_page')) {
+		if (Mage::getStoreConfig('popov_section/settings/first_page')) {
 			$rawUrl = rtrim(rawurldecode($_SERVER['REQUEST_URI']), '/');
 			
 			if ($rawUrl !== ($url = $this->urlPageNormalize($rawUrl))) {
@@ -174,7 +177,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 		$head = Mage::app()->getLayout()->getBlock('head');
 		$includes = $head->getIncludes();
 
-		if ($code = Mage::getStoreConfig('agere_section/settings/google_site_verification')) {
+		if ($code = Mage::getStoreConfig('popov_section/settings/google_site_verification')) {
 			// md - IroTkpMFGodsAjsCBl4Bj7wMdV3JXXbE2xlw0rUfMic - google
 			// oodji - gCEjRSIqf7vyjTPi5gYw83WPps2e9j92T-iVaLlZtss - google
 			$includes .= '<meta name="google-site-verification" content="' . $code . '" />';
@@ -182,7 +185,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		//Zend_Debug::dump($code); die(__METHOD__);
 
-		if ($code = Mage::getStoreConfig('agere_section/settings/yandex_site_verification')) {
+		if ($code = Mage::getStoreConfig('popov_section/settings/yandex_site_verification')) {
 			// oodji - 744e216c8214dd51 - yandex
 			$includes .= '<meta name="yandex-verification" content="' . $code . '" />';
 		}
@@ -191,7 +194,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function prepareCanonicalLink() {
-		if (Mage::getStoreConfig('agere_section/settings/canonical_link')) {
+		if (Mage::getStoreConfig('popov_section/settings/canonical_link')) {
 			/** @var Mage_Page_Block_Html_Head $head */
 			$head = Mage::app()->getLayout()->getBlock('head');
 			if ($head) {
@@ -201,56 +204,85 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
 	public function prepareHreflang() {
-		if (Mage::getStoreConfig('agere_section/settings/rel_alternate_hreflang')) {
+		if (Mage::getStoreConfig('popov_section/settings/rel_alternate_hreflang')) {
 			/** @var Mage_Page_Block_Html_Head $head */
 			$head = Mage::app()->getLayout()->getBlock('head');
 			if ($head) {
 				$head->addLinkRel('canonical', urldecode(Mage::helper('core/url')->getCurrentUrl()));
 
 				/** @link http://stackoverflow.com/a/5867890 */
-
-				//$isHomePage = Mage::getBlockSingleton('page/html_header')->getIsHomePage();
-				//$storeCurr = Mage::app()->getStore();
-				//$storeDefault = Mage::app()->getStore(Mage::app()->getWebsite(true)->getDefaultGroup()->getDefaultStoreId());
 				$stores = Mage::app()->getWebsite()->getStores();
 
 				$includes = '';
-				/*foreach ($stores as $storeId => $store) {
-					$baseUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
-					if (($storeCurr->getId() === $storeDefault->getId()) && ($storeCurr->getId() === $store->getId())) {
-						if (!$isHomePage) {
-							$baseUrl = $baseUrl . $store->getCode();
-						}
-						$includes .= str_replace('//', '/', sprintf($template, $store->getCode(), $baseUrl . $this->getUrlWithoutStore()));
-						continue;
-					} elseif ($storeCurr->getId() === $store->getId()) {
-						continue;
-					}
-					$baseUrl = $baseUrl . $store->getCode();
-					$includes .= sprintf($template, $store->getCode(), rtrim($baseUrl . $this->getUrlWithoutStore(), '/'));
-				}*/
-
 				$template = '<link rel="alternate" hreflang="%s" href="%s" />';
 				$currentStoreId = Mage::app()->getStore()->getId();
-				$useCountryByDefault = Mage::getStoreConfig('agere_section/settings/rel_alternate_hreflang_country');
+				$useCountryByDefault = Mage::getStoreConfig('popov_section/settings/rel_alternate_hreflang_country');
 				//Zend_Debug::dump($useCountryByDefault); die(__METHOD__);
 				foreach ($stores as $store) {
-					//if ($store->getId() != $currentStoreId) {
-						Mage::app()->setCurrentStore($store->getId());
-						$localeCode = Mage::getStoreConfig('general/locale/code', $store->getId());
-						if ($useCountryByDefault) {
-							$languageCode = substr(strtolower($localeCode), 0, 2);
-							$countryCode = strtolower(Mage::getStoreConfig('general/country/default', $store));
-							$hrefLang = $languageCode . '-' . $countryCode;
-						} else {
-							$hrefLang = strtolower(str_replace('_', '-', $localeCode));
-						}
-						$includes .= sprintf($template, $hrefLang, rtrim($store->getCurrentUrl(false), '/'));
-					//}
+                    Mage::app()->setCurrentStore($store->getId());
+                    /*$localeCode = Mage::getStoreConfig('general/locale/code', $store->getId());
+                    if ($useCountryByDefault) {
+                        $languageCode = substr(strtolower($localeCode), 0, 2);
+                        $countryCode = strtolower(Mage::getStoreConfig('general/country/default', $store));
+                        $hrefLang = $languageCode . '-' . $countryCode;
+                    } else {
+                        $hrefLang = strtolower(str_replace('_', '-', $localeCode));
+                    }*/
+                    $hrefLang = $this->getHrefLang($store);
+                    $includes .= sprintf($template, $hrefLang, rtrim($store->getCurrentUrl(false), '/'));
 				}
 				Mage::app()->setCurrentStore($currentStoreId);
 
 				$head->setData('includes', $head->getIncludes() . $includes);
+			}
+		}
+	}
+
+    public function getHrefLang($store = null) {
+        if (!$store) {
+            $store = Mage::app()->getStore();
+        }
+
+        $useCountryByDefault = Mage::getStoreConfig('popov_section/settings/rel_alternate_hreflang_country');
+        $localeCode = Mage::getStoreConfig('general/locale/code', $store->getId());
+        if ($useCountryByDefault) {
+            $languageCode = substr(strtolower($localeCode), 0, 2);
+            $countryCode = strtolower(Mage::getStoreConfig('general/country/default', $store));
+            $hrefLang = $languageCode . '-' . $countryCode;
+        } else {
+            $hrefLang = strtolower(str_replace('_', '-', $localeCode));
+        }
+
+        return $hrefLang;
+    }
+
+	public function prepareStaticNoindexNofollow() {
+		/** @var $head Mage_Page_Block_Html_Head */
+		if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
+			/*
+			 *
+			 * 	http://md-fashion.com.ua/ru/checkout/cart/
+•	https://md-fashion.com.ua/ru/customer/account/login/
+•	https://md-fashion.com.ua/ru/customer/account/create/
+•	https://md-fashion.com.ua/ru/customer/account/forgotpassword/
+•	http://md-fashion.com.ua/ru/contacts
+	https://md-fashion.com.ua/ru/newsletter/subscriber/new/
+
+			 */
+
+			$staticList = array(
+				'/checkout/cart',
+				'/customer/account',
+				'/contacts/index',
+				'/catalogsearch/result',
+			);
+
+			$request = Mage::app()->getRequest();
+			$key = '/' . $request->getModuleName() . '/' . $request->getControllerName();
+
+			//Zend_Debug::dump($key); die(__METHOD__);
+			if (in_array($key, $staticList)) {
+				$head->setRobots('NOINDEX, NOFOLLOW');
 			}
 		}
 	}
@@ -337,7 +369,10 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 			'/magmi/index',
 			'/acquiring/index',
 			'/ebizautoresponder/autoresponder',
-			'/robots/index'
+			'/robots/index',
+			'/novaposhta/index',
+			'/novaposhta/index/street',
+			'/newsletter/subscriber',
 		);
 
 		$request = Mage::app()->getRequest();
@@ -364,6 +399,23 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 		$pathPieces = array_slice($uri, $offset, $key);
 
 		return implode($delimiter, $pathPieces);
+	}
+	
+	public function isHomePage() {
+		//$routeName = Mage::app()->getRequest()->getRouteName();
+		//$identifier = Mage::getSingleton('cms/page')->getIdentifier();
+		//return ($routeName == 'cms' && $identifier == 'home') ? true : false;
+		$storeDefault = Mage::app()->getStore(Mage::app()->getWebsite()->getDefaultGroup()->getDefaultStoreId());
+		$baseUrl = Mage::getBaseUrl();
+		$currentUrl = Mage::helper('core/url')->getCurrentUrl() . $storeDefault->getCode();
+
+		//ob_start();
+		//Zend_Debug::dump($baseUrl);
+		//Zend_Debug::dump($currentUrl);
+		//$items .= ob_get_clean();
+		//echo '<div class="popov-dump" style="display:none">' . $items . '</div>';
+		
+		return (trim($baseUrl, '/') === trim($currentUrl, '/')) ? true : false;
 	}
 	
 }

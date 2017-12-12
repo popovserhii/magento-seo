@@ -13,7 +13,8 @@
           ["app/code/community/Popov/Seo/", "app/code/community/Popov/Seo/"],
           ["app/locale/en_US/Popov_Seo.csv", "app/locale/en_US/Popov_Seo.csv"],
           ["app/locale/uk_UA/Popov_Seo.csv", "app/locale/uk_UA/Popov_Seo.csv"],
-          ["app/locale/ru_RU/Popov_Seo.csv", "app/locale/ru_RU/Popov_Seo.csv"]
+          ["app/locale/ru_RU/Popov_Seo.csv", "app/locale/ru_RU/Popov_Seo.csv"],
+          ["app/design/frontend/base/default/layout/popov/seo.xml", "app/design/frontend/base/default/layout/popov/seo.xml"]
         ]
     }
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 16.10.14 12:41
  */
 class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Action {
@@ -11,7 +11,7 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 		//die(__METHOD__);
 		//$this->_title($this->__('Meta Tags'));
 		// see layout
-		//$this->_addContent($this->getLayout()->createBlock('agere_robots/adminhtml_robots'));
+		//$this->_addContent($this->getLayout()->createBlock('popov_robots/adminhtml_robots'));
 
 		$this->_initAction();
 		$this->renderLayout();
@@ -34,11 +34,11 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 			$model->setData($data);
 		}
 
-		Mage::register('current_agere_meta', $model);
+		Mage::register('current_popov_meta', $model);
 
 		$this->_initAction()
 			->_addBreadcrumb($id ? $this->__('Edit Rule') : $this->__('New Robots.txt'), $id ? $this->__('Edit Rule') : $this->__('New Rule'))
-			//->_addContent($this->getLayout()->createBlock('agere_robots/adminhtml_robots_edit')->setData('action', $this->getUrl('*/*/save')))
+			//->_addContent($this->getLayout()->createBlock('popov_robots/adminhtml_robots_edit')->setData('action', $this->getUrl('*/*/save')))
 			->renderLayout();
 	}
 

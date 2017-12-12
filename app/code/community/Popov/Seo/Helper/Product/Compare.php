@@ -2,9 +2,9 @@
 /**
  * Overwrite "add-to-links"
  *
- * @category Agere
- * @package Agere_<package>
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @category Popov
+ * @package Popov_<package>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 28.06.15 22:36
  */
 class Popov_Seo_Helper_Product_Compare extends Mage_Catalog_Helper_Product_Compare {

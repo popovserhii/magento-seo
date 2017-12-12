@@ -1,8 +1,8 @@
 <?php
 /**
- * @category    Agere
+ * @category    Popov
  * @package     Popov_Seo
- * @copyright   Copyright (c) http://agere.com.ua
+ * @copyright   Copyright (c) http://popov.com.ua
  * @license     http://www.manadev.com/license  Proprietary License
  * @author      Popov Sergiy
  */

@@ -2,9 +2,9 @@
 /**
  * Meta tags overwrite
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 17.04.14 18:27
  */
 
@@ -78,8 +78,8 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 
 	public function handleSeoAttributes($attrs) {
 		if (!is_array($attrs)) {
-			/** @var Agere_Base_Helper_String $stringHelper */
-			$stringHelper = Mage::helper('agere_base/string');
+			/** @var Popov_Base_Helper_String $stringHelper */
+			$stringHelper = Mage::helper('popov_base/string');
 			$attrs = $stringHelper->create(str_replace(' ', '', $attrs))->explode(',');
 		}
 		sort($attrs);
@@ -149,9 +149,9 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	}
 
 	protected function prepareValue($value, $vars) {
-		/** @var Agere_Base_Helper_String $stringHelper */
-		$stringHelper = Mage::helper('agere_base/string');
-		
+		/** @var Popov_Base_Helper_String $stringHelper */
+		$stringHelper = Mage::helper('popov_base/string');
+
 		//Zend_Debug::dump($value);
 		//Zend_Debug::dump($vars);
 		$vars = array_merge($this->getAdditionalValues(), $vars);
@@ -360,17 +360,16 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 
 		/** @var Mage_Page_Block_Html_Head $head */
 		$head = Mage::app()->getLayout()->getBlock('head');
-
 		if ($head) {
 			$metaTags = $this->getMetaTags();
 			foreach($metaTags as $tag => $value) {
-				if (!$prepared || !$this->canOverwriteDefaultMetaTags()) {
-					$value = $head->getData($tag) . ' ' .  $value;
+				//Zend_Debug::dump($value);
+				//Zend_Debug::dump($head->getData($tag));
+
+				if ($value && $this->canOverwriteDefaultMetaTags()) {
+					$head->setData($tag, $value);
 				}
-				/*if (trim($value) && ($end = $this->getGeneralEndingOfMetaTags())) {
-					$value = sprintf('%s - %s', $value,  $end);
-				}*/
-				$head->setData($tag, $value);
+
 			}
 			Mage::dispatchEvent('a_meta_tags_change_after', array('block' => $head));
 		}

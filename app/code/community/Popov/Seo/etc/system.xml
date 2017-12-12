@@ -1,20 +1,20 @@
 <?xml version="1.0" ?>
 <config>
 	<tabs>
-		<agere module="popov_seo" translate="label">
-			<label>Agere</label>
+		<popov module="popov_seo" translate="label">
+			<label>Popov</label>
 			<sort_order>10000</sort_order>
-		</agere>
+		</popov>
 	</tabs>
 
 	<sections>
-		<agere_section module="popov_seo" translate="label">
+		<popov_section module="popov_seo" translate="label">
 			<label>SEO</label>
 			<sort_order>200</sort_order>
 			<show_in_default>1</show_in_default>
 			<show_in_website>1</show_in_website>
 			<show_in_store>1</show_in_store>
-			<tab>agere</tab>
+			<tab>popov</tab>
 			<groups>
 				<settings translate="label">
 					<label>SEO Settings</label>
@@ -195,6 +195,6 @@
 					</fields>
 				</settings>
 			</groups>
-		</agere_section>
+		</popov_section>
 	</sections>
 </config>

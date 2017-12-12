@@ -2,9 +2,9 @@
 /**
  * SEO meta tag factory
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 20.04.14 19:21
  */
 

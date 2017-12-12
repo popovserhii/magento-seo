@@ -1,8 +1,8 @@
 <?php
 /**
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 26.06.15 15:00
  */
 class Popov_Seo_Block_Adminhtml_Meta_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
@@ -23,7 +23,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit extends Mage_Adminhtml_Block_Widget_Fo
 	 * @return string
 	 */
 	public function getHeaderText() {
-		$model = Mage::registry('current_agere_meta');
+		$model = Mage::registry('current_popov_meta');
 		if ($model->getId()) {
 			return $this->__("Edit Rule");
 		} else {

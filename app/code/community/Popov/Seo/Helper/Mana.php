@@ -1,8 +1,8 @@
 <?php
 /**
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 28.06.15 0:57
  */
 

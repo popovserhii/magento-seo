@@ -2,9 +2,9 @@
 /**
  * Context Seo block
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 16.10.14 15:29
  */
 class Popov_Seo_Block_SeoBlock extends Mage_Core_Block_Template {

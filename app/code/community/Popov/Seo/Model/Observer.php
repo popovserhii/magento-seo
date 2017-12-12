@@ -2,9 +2,9 @@
 /**
  * Change meta tags before layout render
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 20.04.14 15:02
  */
 
@@ -35,6 +35,7 @@ class Popov_Seo_Model_Observer extends Varien_Event_Observer {
 		if (!Mage::app()->getStore()->isAdmin()) {
 			$this->getSeoHelper()->prepareCanonicalLink();
 			$this->getSeoHelper()->prepareHreflang();
+			$this->getSeoHelper()->prepareStaticNoindexNofollow();
 		}
 	}
 

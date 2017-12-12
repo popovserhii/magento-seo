@@ -2,9 +2,9 @@
 /**
  * Enter description here...
  *
- * @category Agere
- * @package Agere_<package>
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @category Popov
+ * @package Popov_<package>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 29.10.14 18:46
  */
 
@@ -28,7 +28,7 @@ class Popov_Seo_SeoBlockController extends Mage_Core_Controller_Front_Action
 
 				/** @var Popov_Seo_Block_SeoBlock $seoBlock */
 				$seoBlock = Mage::getBlockSingleton('popov_seo/seoBlock');
-				$seoBlock->setTemplate('agere/seo/block/top.phtml');
+				$seoBlock->setTemplate('popov/seo/block/top.phtml');
 				$result['seoText'] = $seoBlock->renderView();
 			}
 

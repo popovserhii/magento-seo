@@ -2,9 +2,9 @@
 /**
  * Handle url
  *
- * @category Agere
- * @package Agere_Agere
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @category Popov
+ * @package Popov_Popov
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 24.07.15 16:23
  */
 

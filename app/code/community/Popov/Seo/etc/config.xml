@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Popov_Seo>
-			<version>0.1.6</version>
+			<version>0.1.7</version>
 		</Popov_Seo>
 	</modules>
 
@@ -48,25 +48,7 @@
 			</popov_seo_resource>
 			<!--<core>
 				<rewrite>
-					<url>Popov_Seo_Model_Url</url>
-				</rewrite>
-			</core>-->
-			<core>
-				<rewrite>
 					<store>Popov_Seo_Model_Store</store>
-				</rewrite>
-			</core>
-
-
-			<!--<manapro_filterseolinks>
-				<class>ManaPro_FilterSeoLinks_Model</class>
-				<resourceModel>manapro_filterseolinks_resources</resourceModel>
-			</manapro_filterseolinks>
-			<core>
-				<rewrite>
-					<url>ManaPro_FilterSeoLinks_Model_Url</url>
-					<url_rewrite>ManaPro_FilterSeoLinks_Model_Rewrite</url_rewrite>
-					<store>ManaPro_FilterSeoLinks_Model_Store</store>
 				</rewrite>
 			</core>-->
 		</models>
@@ -146,7 +128,7 @@
 		<layout>
 			<updates>
 				<popov_seo>
-					<file>agere/seo.xml</file>
+					<file>popov/seo.xml</file>
 				</popov_seo>
 			</updates>
 		</layout>
@@ -171,7 +153,7 @@
 					We again keep a nice naming convention and make our module upgrade proof by placing it in a separate folder
 					- Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
 					-->
-					<file>agere/seo.xml</file>
+					<file>popov/seo.xml</file>
 				</popov_seo>
 			</updates>
 		</layout>

@@ -2,9 +2,9 @@
 /**
  * Category SEO meta tags
  *
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 20.04.14 19:31
  */
 class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract {
@@ -33,10 +33,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	}
 
 	protected function changeH1TitleTag() {
-		if (Mage::getStoreConfig('agere_section/settings/dynamic_title')) {
+		if (Mage::getStoreConfig('popov_section/settings/dynamic_title')) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['value'];
 			$bestRule = $this->getFittingRule();
-
+			//Zend_Debug::dump($fittingAttrs); die(__METHOD__);
 			if (!$bestRule) {
 				return false;
 			}
@@ -60,7 +60,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 			/** @var $layer Mage_Catalog_Model_Layer */
 			//$layer = Mage::getSingleton($layerModel);
-			foreach (explode(',', Mage::getStoreConfig('agere_section/settings/no_index')) as $noIndexProcessorName) {
+			foreach (explode(',', Mage::getStoreConfig('popov_section/settings/no_index')) as $noIndexProcessorName) {
 				if (!$noIndexProcessorName) {
 					continue;
 				}
@@ -72,7 +72,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 				}
 			}
 
-			foreach (explode(',', Mage::getStoreConfig('agere_section/settings/follow')) as $followProcessorName) {
+			foreach (explode(',', Mage::getStoreConfig('popov_section/settings/follow')) as $followProcessorName) {
 				if (!$followProcessorName) {
 					continue;
 				}
@@ -100,10 +100,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
 			$index = false;
 
-			//Zend_Debug::dump(Mage::getStoreConfig('agere_section/settings/index', Mage::app()->getStore())); //die(__METHOD__);
+			//Zend_Debug::dump(Mage::getStoreConfig('popov_section/settings/index', Mage::app()->getStore())); //die(__METHOD__);
 			
 			/** @var $layer Mage_Catalog_Model_Layer */
-			foreach (explode(',', Mage::getStoreConfig('agere_section/settings/index')) as $indexProcessorName) {
+			foreach (explode(',', Mage::getStoreConfig('popov_section/settings/index')) as $indexProcessorName) {
 				if (!$indexProcessorName) {
 					continue;
 				}
@@ -159,7 +159,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	}
 
 	protected function prepareLinkRel() {
-		if (Mage::getStoreConfig('agere_section/settings/rel_prev_next')) {
+		if (Mage::getStoreConfig('popov_section/settings/rel_prev_next')) {
 			/** @var Mage_Page_Block_Html_Head $head */
 			$head = Mage::app()->getLayout()->getBlock('head');
 			if ($head) {
@@ -207,7 +207,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		if (is_null($fitting)) {
 			$seoAttr = $this->registerSeoFilter('category');
 			$fitting['id'][$seoAttr] = Mage::registry('current_category')->getid();
-			$fitting['value'][$seoAttr] = Mage::registry('current_category')->getName();
+			$fitting['value'][$seoAttr] = trim(Mage::registry('current_category')->getName());
 			if (($currentPage = $this->getToolbar()->getCurrentPage()) > 1) {
 				$seoAttr = $this->registerSeoFilter('page');
 				$fitting['id'][$seoAttr] = $currentPage;
@@ -270,7 +270,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 		if (is_null($end)) {
 			$end = false;
-			if (Mage::getStoreConfig('agere_section/settings/pager')) {
+			if (Mage::getStoreConfig('popov_section/settings/pager')) {
 				$tool = $this->getToolbar();
 				if ($this->isPageInUrl()) {
 					if ($tool->getLastPageNum() > 1) {
@@ -296,10 +296,11 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		$coll->addAttributeToFilter('entity_id', array('in' => $pathIds));
 		$categories = array();
 		foreach ($coll as $cat) {
-			$categories[] = $cat->getName();
+			$categories[] = trim($cat->getName());
 		}
 
 		return $categories;
 	}
+
 
 }

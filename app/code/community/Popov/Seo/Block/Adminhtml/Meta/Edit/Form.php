@@ -1,8 +1,8 @@
 <?php
 /**
- * @category Agere
+ * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@agere.com.ua>
+ * @author Popov Sergiy <popov@popov.com.ua>
  * @datetime: 26.06.15 15:14
  */
 class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
@@ -10,7 +10,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 	public function _construct() {
 		parent::_construct();
 
-		$this->setId('agere_meta_form'); //popov_seo_meta_form
+		$this->setId('popov_meta_form'); //popov_seo_meta_form
 		$this->setTitle($this->__('Meta Rule Information'));
 	}
 
@@ -25,7 +25,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 	}*/
 
 	protected function _prepareForm() {
-		$model = Mage::registry('current_agere_meta');
+		$model = Mage::registry('current_popov_meta');
 
 		$form = new Varien_Data_Form(array(
 			'id'     => 'edit_form',

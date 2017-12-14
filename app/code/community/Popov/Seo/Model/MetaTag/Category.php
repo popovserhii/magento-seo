@@ -17,22 +17,44 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 	protected function postRun() {
 		// unset current category description
-		if (Mage::helper('popov_seo')->hasFilters()) {
-			$currentCategory = Mage::registry('current_category');
-			$currentCategory->setData('description', '');
-		}
+		//if (Mage::helper('popov_seo')->hasFilters()) {
+		//	$currentCategory = Mage::registry('current_category');
+		//	$currentCategory->setData('description', '');
+		//}
 
-		$this->changeH1TitleTag();
+		//$this->changeH1TitleTag();
 
 		$this->noindex('catalog/layer');
 		$this->index('catalog/layer');
 
 		$this->order();
+        $this->attachHandler();
 
 		parent::postRun();
 	}
 
-	protected function changeH1TitleTag() {
+	protected function attachHandler()
+    {
+        if ($this->getFittingRule()) {
+            /** @var Mage_Catalog_Helper_Output $outputHelper */
+            $outputHelper = Mage::helper('catalog/output');
+            $outputHelper->addHandler('categoryAttribute', $this);
+        }
+    }
+
+    public function categoryAttribute(Mage_Catalog_Helper_Output $outputHelper, $outputHtml, $params)
+    {
+        //$category = $params['category'];
+        if (($params['attribute'] === 'name')) {
+            $outputHtml = $this->modifyContent('h1', $outputHtml);
+        } elseif ($params['attribute'] === 'description') {
+            $outputHtml = $this->modifyContent('description', $outputHtml);
+        }
+
+        return $outputHtml;
+    }
+
+	/*protected function convertH1() {
 		if (Mage::getStoreConfig('popov_section/settings/dynamic_title')) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['value'];
 			$bestRule = $this->getFittingRule();
@@ -42,15 +64,22 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			}
 
 			$tagValue = trim($this->prepareValue($bestRule->getData('h1_title'), $this->prepareAttrs($fittingAttrs)));
-			if ($tagValue) {
-				Mage::registry('current_category')->setName($tagValue);
-			}
 
-			return true;
 		}
 
 		return false;
-	}
+	}*/
+
+	protected function modifyContent($name, $outputHtml)
+    {
+        if (Mage::getStoreConfig('popov_section/settings/dynamic_' . $name)) {
+            $fittingAttrs = $this->getFittingFilterAttributes()['value'];
+            $bestRule = $this->getFittingRule();
+            $outputHtml = trim($this->prepareValue($bestRule->getData($name), $this->prepareAttrs($fittingAttrs)));
+        }
+
+        return $outputHtml;
+    }
 
 	protected function noindex($layerModel) {
 		/** @var $head Mage_Page_Block_Html_Head */

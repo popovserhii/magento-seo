@@ -242,22 +242,6 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		return $attrCode;
 	}
 
-	/*protected function checkSeoFilter($attrCode) {
-		$seoAttrs = $this->getSeoAttributes();
-
-		foreach ($seoAttrs as $seoAttr) {
-			$pattern = '/^' . $seoAttr . '/';
-			if (preg_match($pattern, $attrCode)) {
-				$subSeoAttr = rtrim(preg_replace("/[^A-Za-z0-9_]/", '', $seoAttr), '_');
-				$this->filteredAttrs[$seoAttr] = $subSeoAttr;
-
-				return $subSeoAttr;
-			}
-		}
-
-		return false;
-	}*/
-
 	protected function getFittingRule() {
 		if (!$this->fittingRule) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['id'];
@@ -298,7 +282,9 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 					}
 				}
 
-				if (($default->getId() != $rule->getId()) && $numFittingAttrs === $best[$key]) {
+				// If set of rules is only with seo_attribute_filters without default rule
+                // then we shouldn't check it, otherwise we check if default and current rule is not equal
+				if (!$default || ($default->getId() != $rule->getId()) && $numFittingAttrs === $best[$key]) {
 					$this->fittingRule = $rule;
 					break;
 				}
@@ -317,22 +303,6 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 
 		return $this->fittingRule;
 	}
-
-	/*protected function prepareSqlFilters() {
-		//$fittingAttrKeys = array_keys($this->getFittingFilterAttributes()['id']);
-		$fittingAttrs = $this->getFittingFilterAttributes()['id'];
-
-		$filters = array();
-		foreach ($fittingAttrs as $code => $value) {
-			$filters['simple'][$code] = $code;
-			$filters['advanced'][$code] = $code . ':' . $value;
-		}
-
-		Zend_Debug::dump($filters); die(__METHOD__);
-
-
-		$rules = $this->getRules();
-	}*/
 
 	protected function getAdditionalValues() {
 		$vars = array();
@@ -359,28 +329,27 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		$prepared = $this->prepareMetaTags();
 
 		/** @var Mage_Page_Block_Html_Head $head */
-		$head = Mage::app()->getLayout()->getBlock('head');
-		if ($head) {
+		if ($head = Mage::app()->getLayout()->getBlock('head')) {
 			$metaTags = $this->getMetaTags();
 			foreach($metaTags as $tag => $value) {
 				//Zend_Debug::dump($value);
 				//Zend_Debug::dump($head->getData($tag));
 
-				if ($value && $this->canOverwriteDefaultMetaTags()) {
+				//if ($value && $this->canOverwriteDefaultMetaTags()) {
 					$head->setData($tag, $value);
-				}
+				//}
 
 			}
-			Mage::dispatchEvent('a_meta_tags_change_after', array('block' => $head));
+			Mage::dispatchEvent('p_meta_tags_change_after', array('block' => $head));
 		}
 	}
 
 	/**
 	 * @todo Create admin GUI and add this option
 	 */
-	protected function canOverwriteDefaultMetaTags() {
+	/*protected function canOverwriteDefaultMetaTags() {
 		return true;
-	}
+	}*/
 
 	/**
 	 * @return bool

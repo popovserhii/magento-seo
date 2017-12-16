@@ -243,7 +243,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	}
 
 	protected function getFittingRule() {
-		if (!$this->fittingRule) {
+		if (is_null($this->fittingRule)) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['id'];
 
 			$best = array();
@@ -251,11 +251,22 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 			$rules = $this->getRules();
 			$numFittingAttrs = count($fittingAttrs);
 
-			//Zend_Debug::dump($rules->count());
+            /*function count_r($array, $i = 0){
+                foreach($array as $k){
+                    if(is_array($k)){ $i += count_r($k, 1); }
+                    else{ $i++; }
+                }
+                return $i;
+            }
+            $numFittingAttrs = count_r($fittingAttrs);*/
+
+
+
+            //Zend_Debug::dump($rules->count());
 			//Zend_Debug::dump($rules->getSelect()->assemble()); die(__METHOD__);
 
 			foreach ($rules as $key => $rule) {
-				if (!($attrs = $rule->getSeoAttributeFilters())) {
+				if (!($attrs = $rule->getSeoOptionFilters())) {
 					$attrs = $rule->getSeoAttributes();
 					$default = $rule;
 				}
@@ -275,16 +286,16 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 					//Zend_Debug::dump($id); //die(__METHOD__);
 					//Zend_Debug::dump($fittingId); //die(__METHOD__);
 
-					if ($id && $fittingId == $id) {
+					if ($id && $fittingId === $id) {
 						$best[$key]++;
 					} elseif (!$id) {
 						$best[$key]++;
 					}
 				}
 
-				// If set of rules is only with seo_attribute_filters without default rule
+				// If set of rules is only with seo_option_filters without default rule
                 // then we shouldn't check it, otherwise we check if default and current rule is not equal
-				if (!$default || ($default->getId() != $rule->getId()) && $numFittingAttrs === $best[$key]) {
+				if ((!$default || ($default->getId() != $rule->getId())) && $numFittingAttrs === $best[$key]) {
 					$this->fittingRule = $rule;
 					break;
 				}

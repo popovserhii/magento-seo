@@ -4,7 +4,7 @@
  *
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 21.04.14 15:22
  */
 

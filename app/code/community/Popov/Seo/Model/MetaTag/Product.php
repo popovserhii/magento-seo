@@ -4,7 +4,7 @@
  *
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 20.04.14 19:31
  */
 class Popov_Seo_Model_MetaTag_Product extends Popov_Seo_Model_MetaTag_Abstract {

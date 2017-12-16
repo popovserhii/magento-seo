@@ -2,7 +2,7 @@
 /**
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 28.06.15 0:57
  */
 

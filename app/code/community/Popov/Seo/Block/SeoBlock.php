@@ -4,7 +4,7 @@
  *
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 16.10.14 15:29
  */
 class Popov_Seo_Block_SeoBlock extends Mage_Core_Block_Template {

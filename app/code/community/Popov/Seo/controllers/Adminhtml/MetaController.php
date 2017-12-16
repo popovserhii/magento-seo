@@ -2,7 +2,7 @@
 /**
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 16.10.14 12:41
  */
 class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Action {
@@ -37,7 +37,7 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 		Mage::register('current_popov_meta', $model);
 
 		$this->_initAction()
-			->_addBreadcrumb($id ? $this->__('Edit Rule') : $this->__('New Robots.txt'), $id ? $this->__('Edit Rule') : $this->__('New Rule'))
+			->_addBreadcrumb($id ? $this->__('Edit Rule') : $this->__('New Rule'), $id ? $this->__('Edit Rule') : $this->__('New Rule'))
 			//->_addContent($this->getLayout()->createBlock('popov_robots/adminhtml_robots_edit')->setData('action', $this->getUrl('*/*/save')))
 			->renderLayout();
 	}
@@ -45,16 +45,16 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 	public function saveAction() {
 		if ($data = $this->getRequest()->getPost()) {
 			try {
-				$data = $this->_filterDates($data, array('updated_at'));
+				//$data = $this->_filterDates($data, array('updated_at'));
 
-				if (isset($data['stores'])) {
-				if (in_array('0', $data['stores'])) {
-				$data['store_id'] = '0';
-				} else {
-				$data['store_id'] = implode(",", $data['stores']);
-				}
-				unset($data['stores']);
-				}
+                if (isset($data['stores'])) {
+                    if (in_array('0', $data['stores'])) {
+                        $data['store_id'] = '0';
+                    } else {
+                        $data['store_id'] = implode(',', $data['stores']);
+                    }
+                    unset($data['stores']);
+                }
 
 				/** @var Popov_Seo_Model_MetaTag_Factory $factory */
 				$factory = Mage::getModel('popov_seo/metaTag_factory');
@@ -70,20 +70,45 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 				$model->save();
 
 				Mage::getSingleton('adminhtml/session')->addSuccess($this->__('SEO Rule was saved successfully'));
-				Mage::getSingleton('adminhtml/session')->setRobotsData(false);
+				Mage::getSingleton('adminhtml/session')->setMetaData(false);
 				$this->_redirect('*/*/');
 			} catch (Mage_Core_Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-			}
-			catch (Exception $e) {
+			} catch (Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($this->__('An error occurred while saving this SEO Rule'));
 			}
+
 			return;
 		}
 
 		Mage::getSingleton('adminhtml/session')->addError($this->__('Unable to find item to save'));
 		$this->_redirect('*/*/');
 	}
+
+	public function copyAction()
+    {
+        $id = (int) $this->getRequest()->getParam('id');
+        try {
+            $model = Mage::getModel('popov_seo/rule')->load($id);
+
+            $data = $model->getData();
+            $data['id'] = null;
+            $data['is_active'] = 0;
+            $data['updated_at'] = Mage::getModel('core/date')->date('Y-m-d H:i:s');
+            $data['created_at'] = Mage::getModel('core/date')->date('Y-m-d H:i:s');
+
+            $copy = Mage::getModel('popov_seo/rule');
+            $copy->setData($data);
+            $copy->save();
+            $id = $copy->getId();
+
+            Mage::getSingleton('adminhtml/session')->addSuccess($this->__('SEO Rule was copied successfully'));
+            Mage::getSingleton('adminhtml/session')->setMetaData(false);
+        } catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('*/*/edit', array('id' => $id));
+    }
 
 	public function deleteAction() {
 		if ($id = $this->getRequest()->getParam('id')) {

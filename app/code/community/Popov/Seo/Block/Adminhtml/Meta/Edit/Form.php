@@ -2,7 +2,7 @@
 /**
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 26.06.15 15:14
  */
 class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
@@ -82,15 +82,15 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 		));
 
 		$fieldset->addField('title', 'text', array(
-			'label'              => $this->__('Title'),
+			'label'              => $this->__('Meta Title'),
 			'name'               => 'title',
 			'required'           => false,
 			'style'              => 'width:100%',
 			'after_element_html' => '<small>Example: Buy {%category% %sex%}:strtolower|translate - Kyiv, Ukraine. {%category% %sex%}:translate online store {%website%}:ucfirst</small>',
 		));
 
-		$fieldset->addField('description', 'text', array(
-			'label'              => $this->__('Description'),
+		$fieldset->addField('description', 'textarea', array(
+			'label'              => $this->__('Meta Description'),
 			'name'               => 'description',
 			'required'           => false,
 			'style'              => 'width:100%',
@@ -98,20 +98,28 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 		));
 
 		$fieldset->addField('keywords', 'text', array(
-			'label'              => $this->__('Keywords'),
+			'label'              => $this->__('Meta Keywords'),
 			'name'               => 'keywords',
 			'required'           => false,
 			'style'              => 'width:100%',
 			'after_element_html' => '<small>Example: {%category% %sex%}:strtolower|translate, online store {%website%}:ucfirst</small>',
 		));
 
-		$fieldset->addField('h1_title', 'text', array(
-			'label'              => $this->__('H1 title'),
-			'name'               => 'h1_title',
-			'required'           => false,
-			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: {%category% %sex%}:strtolower|translate|ucfirst {%website%}:ucfirst</small>',
-		));
+        $fieldset->addField('h1', 'text', array(
+            'label'              => $this->__('Content H1'),
+            'name'               => 'h1',
+            'required'           => false,
+            'style'              => 'width:100%',
+            'after_element_html' => '<small>Example: {%category% %sex%}:strtolower|translate|ucfirst {%website%}:ucfirst</small>',
+        ));
+
+        $fieldset->addField('content', 'textarea', array(
+            'name'     => 'content',
+            'label'    => $this->__('Content Description'),
+            'title'    => $this->__('Content Description'),
+            'required' => false,
+            'style'    => 'width: 100%; height: 200px;',
+        ));
 
 		$fieldset->addField('seo_attributes', 'text', array(
 			'label'              => $this->__('Attributes'),
@@ -121,21 +129,13 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			'after_element_html' => '<small>Example: category;sex</small>',
 		));
 
-		$fieldset->addField('seo_attribute_filters', 'text', array(
+		$fieldset->addField('seo_option_filters', 'text', array(
 			'label'              => $this->__('Attribute filters'),
-			'name'               => 'seo_attribute_filters',
+			'name'               => 'seo_option_filters',
 			'required'           => false,
 			'style'              => 'width:100%',
 			'after_element_html' => '<small>Example: category;sex:2</small>',
 		));
-
-		/*$fieldset->addField('content', 'textarea', array(
-			'name'     => 'content',
-			'label'    => $this->__('Meta Tags Rule content'),
-			'title'    => $this->__('Meta Tags Rule content'),
-			'required' => true,
-			'style'    => 'width: 50%; height: 200px;',
-		));*/
 
 		$fieldset->addField('is_active', 'select', array(
 			'label'     => $this->__('Status'),

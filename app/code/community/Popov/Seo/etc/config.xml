@@ -65,7 +65,8 @@
 		</resources>
 
 		<events>
-			<controller_action_layout_render_before_catalog_category_view> <!-- this name is really important, use this to indicate the layout-render-before event -->
+            <!-- this name is really important, use this to indicate the layout-render-before event -->
+			<!--<controller_action_layout_render_before_catalog_category_view>
 				<observers>
 					<popov_seo_meta_tags_observer>
 						<type>singleton</type>
@@ -73,7 +74,16 @@
 						<method>hookToChangeMetaTags</method>
 					</popov_seo_meta_tags_observer>
 				</observers>
-			</controller_action_layout_render_before_catalog_category_view>
+			</controller_action_layout_render_before_catalog_category_view>-->
+			<controller_action_layout_render_before>
+				<observers>
+					<popov_seo_meta_tags_observer>
+						<type>singleton</type>
+						<class>Popov_Seo_Model_Observer</class>
+						<method>hookToChangeMetaTags</method>
+					</popov_seo_meta_tags_observer>
+				</observers>
+			</controller_action_layout_render_before>
 			<controller_action_layout_render_before_catalog_product_view>
 				<observers>
 					<popov_seo_meta_tags_observer>
@@ -170,6 +180,20 @@
 			</adminhtml>
 		</routers>
 	</admin>
+
+	<popov_seo>
+        <handlers>
+            <product>
+                <model>Popov_Seo_Model_MetaTag_Product</model>
+            </product>
+            <category>
+                <model>Popov_Seo_Model_MetaTag_Category</model>
+            </category>
+            <!--<filters>
+                <model>Popov_Seo_Model_MetaTag_Category</model>
+            </filters>-->
+        </handlers>
+    </popov_seo>
 
 	<popov_seo_filterlinks>
 		<noindex>

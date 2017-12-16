@@ -28,15 +28,36 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		$this->index('catalog/layer');
 
 		$this->order();
+
+        $this->changeContent();
         $this->attachHandler();
 
 		parent::postRun();
 	}
 
+	public function changeContent()
+    {
+        if ($this->getFittingRule()) {
+            $category = Mage::registry('current_category');
+            //$category->setName($this->modifyContent('h1'));
+            if (Mage::getStoreConfig('popov_section/settings/description_on_first_page') && ($this->getPage() > 1)) {
+                $category->setDescription('');
+            } else {
+                $category->setDescription($this->modifyContent('content'));
+            }
+        }
+    }
+
+    /**
+     * This code is code isn't actual as category description cannot be set by default and based on this
+     * output helper cannot be called @see app/design/frontend/default/megamuscle/template/catalog/category/view.phtml
+     *
+     * Most of SEO module use this particular functionality. First call of $this->changeContent() allow set description
+     * and second override all other module values
+     */
 	protected function attachHandler()
     {
         if ($this->getFittingRule()) {
-            /** @var Mage_Catalog_Helper_Output $outputHelper */
             $outputHelper = Mage::helper('catalog/output');
             $outputHelper->addHandler('categoryAttribute', $this);
         }
@@ -44,11 +65,15 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
     public function categoryAttribute(Mage_Catalog_Helper_Output $outputHelper, $outputHtml, $params)
     {
-        //$category = $params['category'];
         if (($params['attribute'] === 'name')) {
             $outputHtml = $this->modifyContent('h1', $outputHtml);
         } elseif ($params['attribute'] === 'description') {
-            $outputHtml = $this->modifyContent('description', $outputHtml);
+            if (Mage::getStoreConfig('popov_section/settings/description_on_first_page') && ($this->getPage() > 1)) {
+                $outputHtml = '';
+            } else {
+                $outputHtml = $this->modifyContent('content', $outputHtml);
+            }
+
         }
 
         return $outputHtml;
@@ -70,13 +95,13 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		return false;
 	}*/
 
-	protected function modifyContent($name, $outputHtml)
+	protected function modifyContent($name/*, $outputHtml*/)
     {
-        if (Mage::getStoreConfig('popov_section/settings/dynamic_' . $name)) {
+        //if (Mage::getStoreConfig('popov_section/settings/dynamic_' . $name)) {
             $fittingAttrs = $this->getFittingFilterAttributes()['value'];
             $bestRule = $this->getFittingRule();
             $outputHtml = trim($this->prepareValue($bestRule->getData($name), $this->prepareAttrs($fittingAttrs)));
-        }
+        //}
 
         return $outputHtml;
     }
@@ -94,7 +119,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 					continue;
 				}
 
-				$noIndexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('popov_seo_filterlinks/noindex')->$noIndexProcessorName->model);
+				$noIndexProcessor = Mage::getModel((string)Mage::getConfig()->getNode('popov_seo_filterlinks/noindex')->{$noIndexProcessorName}->model);
 				if ($noIndexProcessor->detect($layerModel)) {
 					$noIndex = true;
 					break;
@@ -106,7 +131,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 					continue;
 				}
 
-				$followProcessor = Mage::getModel((string)Mage::getConfig()->getNode('popov_seo_filterlinks/noindex')->$followProcessorName->model);
+				$followProcessor = Mage::getModel((string)Mage::getConfig()->getNode('popov_seo_filterlinks/noindex')->{$followProcessorName}->model);
 				if ($followProcessor->detect($layerModel)) {
 					$follow = true;
 					break;
@@ -137,7 +162,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 					continue;
 				}
 
-				$indexProcessorConfig = Mage::getConfig()->getNode('popov_seo_filterlinks/index')->$indexProcessorName;
+				$indexProcessorConfig = Mage::getConfig()->getNode('popov_seo_filterlinks/index')->{$indexProcessorName};
 				$indexProcessor = Mage::getModel((string) $indexProcessorConfig->model);
 				
 				if ($indexProcessor->detect($layerModel, $indexProcessorConfig->rule)) {
@@ -178,8 +203,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	private function getToolbar() {
 		static $tool;
 
-		if (!$tool) {
-			$category = Mage::registry('current_category');
+		if (!$tool && ($category = Mage::registry('current_category'))) {
 			$prodCol = $category->getProductCollection()->addAttributeToFilter('status', 1)->addAttributeToFilter('visibility', array('in' => array(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
 			$tool = Mage::app()->getLayout()->createBlock('page/html_pager')->setLimit(Mage::app()->getLayout()->createBlock('catalog/product_list_toolbar')->getLimit())->setCollection($prodCol);
 		}
@@ -234,14 +258,16 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		static $fitting = null;
 
 		if (is_null($fitting)) {
-			$seoAttr = $this->registerSeoFilter('category');
-			$fitting['id'][$seoAttr] = Mage::registry('current_category')->getid();
-			$fitting['value'][$seoAttr] = trim(Mage::registry('current_category')->getName());
-			if (($currentPage = $this->getToolbar()->getCurrentPage()) > 1) {
-				$seoAttr = $this->registerSeoFilter('page');
-				$fitting['id'][$seoAttr] = $currentPage;
-				$fitting['value'][$seoAttr] = $currentPage;
-			}
+		    if ($category = Mage::registry('current_category')) {
+                $seoAttr = $this->registerSeoFilter('category');
+                $fitting['id'][$seoAttr] = $category->getid();
+                $fitting['value'][$seoAttr] = trim($category->getName());
+            }
+            if (($currentPage = $this->getToolbar()->getCurrentPage()) > 1) {
+                $seoAttr = $this->registerSeoFilter('page');
+                $fitting['id'][$seoAttr] = $currentPage;
+                $fitting['value'][$seoAttr] = $currentPage;
+            }
 
 			/** @var Mage_Catalog_Model_Layer_Filter_Item $filter */
 			/** @var Mage_Eav_Model_Entity_Attribute_Frontend_Default $attrFront */
@@ -290,31 +316,13 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		return $this->rules;
 	}
 
-	/**
-	 * @return bool|string
-	 * @deprecated
-	 */
-	/*protected function getGeneralEndingOfMetaTags() {
-		static $end = null;
-
-		if (is_null($end)) {
-			$end = false;
-			if (Mage::getStoreConfig('popov_section/settings/pager')) {
-				$tool = $this->getToolbar();
-				if ($this->isPageInUrl()) {
-					if ($tool->getLastPageNum() > 1) {
-						$end = Mage::helper('popov_seo')->__('page') . ' ' . $tool->getCurrentPage();
-					}
-				}
-			}
-		}
-
-		return $end;
-	}*/
+	private function getPage() {
+	    return (int) $this->getToolbar()->getRequest()->getParam($this->getToolbar()->getPageVarName());
+    }
 
 	private function isPageInUrl() {
 		$tool = $this->getToolbar();
-		return ((int) $tool->getRequest()->getParam($tool->getPageVarName())) && $tool->getCollection()->getSize();
+		return ($this->getPage()) && $tool->getCollection()->getSize();
 	}
 
 	public function getCategoryPathNames() {

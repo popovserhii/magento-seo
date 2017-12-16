@@ -4,40 +4,47 @@
  *
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 20.04.14 14:54
  */ 
-class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
+class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
+{
+    public function getSeoName()
+    {
+        static $seoName = null;
+        $metaTags = [
+            'catalog_product_view' => 'Catalog Product',
+            'catalog_category_view' => 'Catalog Category',
+            //'filter' => 'Layered Navigation',
+        ];
 
-	public function getSeoName() {
-		static $seoName = '';
+        /** @var Popov_Base_Helper_String $stringHelper */
+        if (is_null($seoName)) {
+            $stringHelper = Mage::helper('popov_base/string');
+            $moduleName = Mage::app()->getRequest()->getModuleName();
+            $fullActionName = Mage::app()->getFrontController()->getAction()->getFullActionName();
+            $seoName = false;
+            if (isset($metaTags[$fullActionName])) {
+                $actionName = str_replace($moduleName . '_', '', $fullActionName);
+                $seoName = $stringHelper->create($actionName)->explode('_');
+                $seoName = array_shift($seoName);
+            } /*elseif ($this->hasFilters() && isset($metaTags['filter'])) {
+                $seoName = 'filter';
+            }*/
+        }
 
-		/** @var Popov_Base_Helper_String $stringHelper */
-		if (!$seoName) {
-			$stringHelper = Mage::helper('popov_base/string');
-			$moduleName = Mage::app()->getRequest()->getModuleName();
-			$fullActionName = Mage::app()->getFrontController()->getAction()->getFullActionName();
-			$actionName = str_replace($moduleName . '_', '', $fullActionName);
-            $seoName = $stringHelper->create($actionName)->explode('_');
-			$seoName = array_shift($seoName);
-		}
+        return $seoName;
+    }
 
-		return $seoName;
-	}
-
-	public function hasFilters() {
+    public function hasFilters() {
 		$filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
 
 		return count($filters);
 	}
 
 	public function urlPageNormalize($url) {
-		//$url = 'http://md-fashion.dev/ru/women/where/item-type/джинсы/p/1';
+		//$url = 'http://example.com/ru/women/where/item-type/джинсы/p/1';
 		$prepare = preg_replace('#^(.*)/p/1[\D]*$#', '$1', $url);
-		$prepare = preg_replace('#/where$#', '', $prepare);
-
-		//Zend_Debug::dump($s);
-		//Zend_Debug::dump($prepare); die(__METHOD__);
 
 		return $prepare;
 	}
@@ -50,7 +57,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function redirect301() {
 		#RewriteRule     ^index.php/admin/(.*)$   	http://%{HTTP_HOST}/en/$1    	[R=301,NC,L]    # Permanent Move
 		$list = array(
-			'^/index.php/admin/(.*)$' => "http://{$_SERVER['HTTP_HOST']}/en/$1",
+			//'^/index.php/admin/(.*)$' => "http://{$_SERVER['HTTP_HOST']}/en/$1",
 			'(.*)/mode/list$' => "http://{$_SERVER['HTTP_HOST']}/$1",
 			'(.*)/mode/grid$' => "http://{$_SERVER['HTTP_HOST']}/$1",
 		);
@@ -259,16 +266,16 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function prepareStaticNoindexNofollow() {
 		/** @var $head Mage_Page_Block_Html_Head */
 		if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
-			/*
-			 *
-			 * 	http://md-fashion.com.ua/ru/checkout/cart/
-•	https://md-fashion.com.ua/ru/customer/account/login/
-•	https://md-fashion.com.ua/ru/customer/account/create/
-•	https://md-fashion.com.ua/ru/customer/account/forgotpassword/
-•	http://md-fashion.com.ua/ru/contacts
-	https://md-fashion.com.ua/ru/newsletter/subscriber/new/
+            /*
+             *
+             * 	http://md-fashion.com.ua/ru/checkout/cart/
+            •	https://md-fashion.com.ua/ru/customer/account/login/
+            •	https://md-fashion.com.ua/ru/customer/account/create/
+            •	https://md-fashion.com.ua/ru/customer/account/forgotpassword/
+            •	http://md-fashion.com.ua/ru/contacts
+                https://md-fashion.com.ua/ru/newsletter/subscriber/new/
 
-			 */
+             */
 
 			$staticList = array(
 				'/checkout/cart',

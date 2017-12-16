@@ -4,7 +4,7 @@
  *
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 26.06.15 13:32
  */
 class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Grid {
@@ -54,9 +54,9 @@ class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Gr
 			'index'  => 'seo_attributes'
 		));
 
-		$this->addColumn('seo_attribute_filters', array(
+		$this->addColumn('seo_option_filters', array(
 			'header' => $this->__('Attribute filters'),
-			'index'  => 'seo_attribute_filters'
+			'index'  => 'seo_option_filters'
 		));
 
 		$this->addColumn('type', array(

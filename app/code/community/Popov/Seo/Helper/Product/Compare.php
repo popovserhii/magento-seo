@@ -4,7 +4,7 @@
  *
  * @category Popov
  * @package Popov_<package>
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 28.06.15 22:36
  */
 class Popov_Seo_Helper_Product_Compare extends Mage_Catalog_Helper_Product_Compare {

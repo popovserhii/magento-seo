@@ -4,7 +4,7 @@
  * @package     Popov_Seo
  * @copyright   Copyright (c) http://popov.com.ua
  * @license     http://www.manadev.com/license  Proprietary License
- * @author      Popov Sergiy
+ * @author      Serhii Popov
  */
 class Popov_Seo_Model_FilterLinks_Noindex_Slider {
 

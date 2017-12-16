@@ -8,7 +8,7 @@ $tableRule = $installer->getTable('popov_seo/rule');
 $installer->run("
 	/*Table structure for table `popov_seo_rule` */
     ALTER TABLE {$tableRule}
-    CHANGE COLUMN `date_created` `created_at` DATETIME NOT NULL default '0000-00-00 00:00:00' AFTER `seo_attribute_filters`, /* cannot create DSL structure for default datetime */
+    CHANGE COLUMN `date_created` `created_at` DATETIME NOT NULL default '0000-00-00 00:00:00' AFTER `seo_option_filters`, /* cannot create DSL structure for default datetime */
     ADD COLUMN `updated_at` DATETIME NOT NULL default '0000-00-00 00:00:00'; /* @see http://magento.stackexchange.com/a/3217 */
 ");
 

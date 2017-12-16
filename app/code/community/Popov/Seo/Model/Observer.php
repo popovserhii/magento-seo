@@ -4,7 +4,7 @@
  *
  * @category Popov
  * @package Popov_Seo
- * @author Popov Sergiy <popov@popov.com.ua>
+ * @author Serhii Popov <popow.serhii@gmail.com>
  * @datetime: 20.04.14 15:02
  */
 
@@ -28,7 +28,10 @@ class Popov_Seo_Model_Observer extends Varien_Event_Observer {
 	}
 
 	public function hookToChangeMetaTags(Varien_Event_Observer $observer) {
-		Popov_Seo_Model_MetaTag_Factory::create($this->getSeoHelper()->getSeoName())->run();
+        $seoName = $this->getSeoHelper()->getSeoName();
+	    if (Popov_Seo_Model_MetaTag_Factory::canCreate($seoName)) {
+            Popov_Seo_Model_MetaTag_Factory::create($seoName)->run();
+        }
 	}
 
 	public function hookAfterGenerateBlocks() {

@@ -86,7 +86,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			'name'               => 'title',
 			'required'           => false,
 			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: Buy {%category% %sex%}:strtolower|translate - Kyiv, Ukraine. {%category% %sex%}:translate online store {%website%}:ucfirst</small>',
+			'after_element_html' => '<small>Example: Buy {%category% %manufacturer%}:strtolower|translate - Kyiv, Ukraine. {%category% %manufacturer%}:translate online store {%website%}:ucfirst</small>',
 		));
 
 		$fieldset->addField('description', 'textarea', array(
@@ -94,7 +94,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			'name'               => 'description',
 			'required'           => false,
 			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: {%category% %sex%}:strtolower|translate can order in our online store {%website%}:ucfirst. Large selection. Delivery in Ukraine. Call +38 066 555 5555</small>',
+			'after_element_html' => '<small>Example: {%category% %manufacturer%}:strtolower|translate can order in our online store {%website%}:ucfirst. Large selection. Delivery in Ukraine. Call +38 066 555 5555</small>',
 		));
 
 		$fieldset->addField('keywords', 'text', array(
@@ -102,7 +102,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			'name'               => 'keywords',
 			'required'           => false,
 			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: {%category% %sex%}:strtolower|translate, online store {%website%}:ucfirst</small>',
+			'after_element_html' => '<small>Example: {%category% %manufacturer%}:strtolower|translate, online store {%website%}:ucfirst</small>',
 		));
 
         $fieldset->addField('h1', 'text', array(
@@ -110,7 +110,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
             'name'               => 'h1',
             'required'           => false,
             'style'              => 'width:100%',
-            'after_element_html' => '<small>Example: {%category% %sex%}:strtolower|translate|ucfirst {%website%}:ucfirst</small>',
+            'after_element_html' => '<small>Example: {%category% %manufacturer%}:strtolower|translate|ucfirst {%website%}:ucfirst</small>',
         ));
 
         $fieldset->addField('content', 'textarea', array(
@@ -126,7 +126,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			'name'               => 'seo_attributes',
 			'required'           => true,
 			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: category;sex</small>',
+			'after_element_html' => '<small>Example: category;manufacturer</small>',
 		));
 
 		$fieldset->addField('seo_option_filters', 'text', array(
@@ -134,7 +134,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			'name'               => 'seo_option_filters',
 			'required'           => false,
 			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: category;sex:2</small>',
+			'after_element_html' => '<small>Example: category;manufacturer:2</small>',
 		));
 
 		$fieldset->addField('is_active', 'select', array(

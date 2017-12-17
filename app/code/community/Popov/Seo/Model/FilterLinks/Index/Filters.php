@@ -23,8 +23,7 @@ class Popov_Seo_Model_FilterLinks_Index_Filters {
 			}
 
 			$ruleProcessed = $this->processRule($rule);			
-			//Zend_Debug::dump($ruleProcessed); die(__METHOD__);
-			foreach ($activeAttr as $attrCode => $attr) {				
+			foreach ($activeAttr as $attrCode => $attr) {
 				if (isset($ruleProcessed[$attrCode]) && $ruleProcessed[$attrCode] === count($activeAttr[$attrCode])) {
 					$result = true;
 				} else {

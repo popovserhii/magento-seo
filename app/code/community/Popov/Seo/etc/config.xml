@@ -235,9 +235,9 @@
 				<rule>1 walker</rule>
 			</walker>
 			<oneitemtype translate="title" module="popov_seo">
-				<title>1 item_type filter applied</title>
+				<title>1 manufacturer filter applied</title>
 				<model>popov_seo/filterLinks_index_filters</model>
-				<rule>1 item_type</rule>
+				<rule>1 manufacturer</rule>
 			</oneitemtype>
 			<onebrand_oneitemtype translate="title" module="popov_seo">
 				<title>1 brand and 1 item_type filters applied</title>

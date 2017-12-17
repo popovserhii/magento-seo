@@ -61,6 +61,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 				'name' => 'stores[]',
 				'value' => Mage::app()->getStore(true)->getId(),
 			));
+            $model->setStoreId(Mage::app()->getStore(true)->getId());
 		}
 		
 		/*$fieldset->addField('category_id', 'select', array(

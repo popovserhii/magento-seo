@@ -29,8 +29,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 		$this->order();
 
-        $this->changeContent();
-        $this->attachHandler();
+        if (Mage::getStoreConfig('popov_section/settings/allow_change_content')) {
+            $this->changeContent();
+            $this->attachHandler();
+        }
 
 		parent::postRun();
 	}

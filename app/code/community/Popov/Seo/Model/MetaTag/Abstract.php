@@ -346,9 +346,12 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 				//Zend_Debug::dump($value);
 				//Zend_Debug::dump($head->getData($tag));
 
-				//if ($value && $this->canOverwriteDefaultMetaTags()) {
-					$head->setData($tag, $value);
-				//}
+
+                if (Mage::getStoreConfig('popov_section/settings/allow_change_meta_' . $tag)) {
+                    //if ($value && $this->canOverwriteDefaultMetaTags()) {
+                    $head->setData($tag, $value);
+                    //}
+                }
 
 			}
 			Mage::dispatchEvent('p_meta_tags_change_after', array('block' => $head));
@@ -366,7 +369,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	 * @return bool
 	 * @deprecated
 	 */
-	/*protected function getGeneralEndingOfMetaTags() {
+	/*protected function getGeneralEn`ingOfMetaTags() {
 		return false;
 	}*/
 

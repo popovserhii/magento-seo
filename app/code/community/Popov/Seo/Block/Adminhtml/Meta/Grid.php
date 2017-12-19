@@ -55,7 +55,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Gr
 		));
 
 		$this->addColumn('seo_option_filters', array(
-			'header' => $this->__('Attribute filters'),
+			'header' => $this->__('Attribute options'),
 			'index'  => 'seo_option_filters'
 		));
 

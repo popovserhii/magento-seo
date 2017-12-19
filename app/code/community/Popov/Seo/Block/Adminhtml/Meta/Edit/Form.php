@@ -131,7 +131,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 		));
 
 		$fieldset->addField('seo_option_filters', 'text', array(
-			'label'              => $this->__('Attribute filters'),
+			'label'              => $this->__('Attribute options'),
 			'name'               => 'seo_option_filters',
 			'required'           => false,
 			'style'              => 'width:100%',

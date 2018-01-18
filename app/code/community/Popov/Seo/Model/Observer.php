@@ -18,6 +18,7 @@ class Popov_Seo_Model_Observer extends Varien_Event_Observer {
 	public function controllerActionPredispatch() {
 		if (!Mage::app()->getStore()->isAdmin()) {
 			$this->getSeoHelper()->redirect301();
+			$this->getSeoHelper()->redirectIndexPhp();
 			$this->getSeoHelper()->redirectTrailingSlash();
 			$this->getSeoHelper()->redirectToLowerCase();
 			$this->getSeoHelper()->redirectMultipleSlashes();

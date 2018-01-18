@@ -73,16 +73,28 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 	}
 
+
+	public function redirectIndexPhp() {
+		if (Mage::getStoreConfig('popov_section/settings/index_php')
+            && Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES)) {
+            $currentUrl = Mage::helper('core/url')->getCurrentUrl();
+            if (strpos($currentUrl, 'index.php/') !== false) {
+                $pos = strpos($currentUrl, 'index.php/');
+                $p1 = substr($currentUrl, 0, $pos);
+                $p2 = substr($currentUrl, $pos + 10, strlen($currentUrl));
+                $url = $p1 . $p2;
+
+                header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
+                header('Location: ' . rtrim($url, '/'));
+                die();
+            }
+		}
+	}
+
 	public function redirectTrailingSlash() {
 		if (Mage::getStoreConfig('popov_section/settings/trailing_slash')) {
 			$currentUrl = Mage::helper('core/url')->getCurrentUrl();
 			if ($_SERVER['REQUEST_METHOD'] != 'POST' && !Mage::app()->getRequest()->isAjax()) {
-				/* if this need than check search
-				 * if (strstr($currentUrl, '?')) {
-					$url = strtok($currentUrl, '?');
-				} else {
-					$url = $currentUrl;
-				}*/
 				$url = $currentUrl;
 
 				if ((substr($url, -1) == '/') && ($_SERVER['REQUEST_URI'] !== '/')) {
@@ -93,7 +105,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 			}
 		}
 	}
-	
+
 	/**
 	 * Redirect uppercase url to lowercase
 	 */

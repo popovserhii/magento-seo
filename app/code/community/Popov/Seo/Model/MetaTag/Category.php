@@ -12,7 +12,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	protected $filterDelimeter = ', ';
 
 	protected function preRun() {
-		$this->prepareLinkRel();
+		//$this->prepareLinkRel(); // moved to helper
 	}
 
 	protected function postRun() {

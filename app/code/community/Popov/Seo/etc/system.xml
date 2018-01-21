@@ -204,16 +204,27 @@
 							<show_in_store>1</show_in_store>
 						</allow_change_meta_keywords>
 
-						<allow_change_content translate="label comment">
-							<label>Allow change Content element</label>
-							<comment>H1 and description rules will be applied if this option is selected</comment>
+						<allow_change_h1 translate="label comment">
+							<label>Allow change H1 element</label>
+							<comment>H1 rules will be applied if this option is selected</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
 							<sort_order>32</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-						</allow_change_content>
+						</allow_change_h1>
+
+						<allow_change_description translate="label comment">
+							<label>Allow change description element</label>
+							<comment>Description rules will be applied if this option is selected</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>32</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</allow_change_description>
 
 						<no_index translate="label comment">
 							<label>Search Engines Do Not Index Any of These Pages</label>

@@ -46,7 +46,6 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			));
 		}
 
-
 		//Zend_Debug::dump(get_class(Mage::getSingleton('adminhtml/system_store'))); die(__METHOD__);
 		if (!Mage::app()->isSingleStoreMode()) {
 			$fieldset->addField('store_id', 'multiselect', array(
@@ -82,7 +81,14 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 			),
 		));
 
-		$fieldset->addField('title', 'text', array(
+		$fieldset->addField('context', 'select', array(
+			'label'     => $this->__('Context'),
+			'name'      => 'type',
+			'required'  => true,
+			'options'   => Mage::getModel('Popov_Seo_Model_System_Config_Context')->toOptionArray(),
+		));
+
+		/*$fieldset->addField('title', 'text', array(
 			'label'              => $this->__('Meta Title'),
 			'name'               => 'title',
 			'required'           => false,
@@ -112,14 +118,15 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
             'required'           => false,
             'style'              => 'width:100%',
             'after_element_html' => '<small>Example: {%category% %manufacturer%}:strtolower|translate|ucfirst {%website%}:ucfirst</small>',
-        ));
+        ));*/
 
         $fieldset->addField('content', 'textarea', array(
             'name'     => 'content',
-            'label'    => $this->__('Content Description'),
-            'title'    => $this->__('Content Description'),
+            'label'    => $this->__('Content Rule'),
+            'title'    => $this->__('Content Rule'),
             'required' => false,
             'style'    => 'width: 100%; height: 200px;',
+            'after_element_html' => '<small>Example: Buy {%category% %manufacturer%}:strtolower|translate - Kyiv, Ukraine. {%category% %manufacturer%}:translate online store {%website%}:ucfirst</small>',
         ));
 
 		$fieldset->addField('seo_attributes', 'text', array(

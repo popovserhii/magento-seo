@@ -20,12 +20,10 @@ class Popov_Seo_Block_Widget_Grid_Column_Renderer_Category extends Mage_Adminhtm
     {
 		$categoryNames = '';
 
-		if ($row->getData('path'))
-		{
+		if ($row->getData('path')) {
 			$pathIds = explode('/', $row->getData('path'));
 
-			if ($pathIds[0] == 1)
-			{
+			if ($pathIds[0] == 1) {
 				unset($pathIds[0]);
 			}
 
@@ -38,8 +36,7 @@ class Popov_Seo_Block_Widget_Grid_Column_Renderer_Category extends Mage_Adminhtm
 
 			$tmp = [];
 
-			foreach ($pathIds as $categoryId)
-			{
+			foreach ($pathIds as $categoryId) {
 				$tmp[] = $categories[$categoryId]->getName();
 			}
 

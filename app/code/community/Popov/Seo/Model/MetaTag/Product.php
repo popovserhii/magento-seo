@@ -102,5 +102,4 @@ class Popov_Seo_Model_MetaTag_Product extends Popov_Seo_Model_MetaTag_Abstract {
 			$fitting['value'][$attrCode] = $product->{$method}();
 		}
 	}
-
 }

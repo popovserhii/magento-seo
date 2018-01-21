@@ -31,14 +31,14 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	 *
 	 * @var Popov_Seo_Model_Rule
 	 */
-	protected $fittingRule;
+	protected $fittingRules;
 
 	/**
 	 * Tags content
 	 *
 	 * @var array
 	 */
-	protected $metaTags = array(
+	protected $tags = array(
 		'title' => '',
 		'description' => '',
 		'keywords' => '',
@@ -57,7 +57,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	public function run() {
 		$this->preRun();
 
-		$this->changeHeadMetaTags();
+		$this->changeTags();
 
 		$this->postRun();
 	}
@@ -120,24 +120,6 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		return $this->rules;
 	}
 
-	public function prepareMetaTags() {
-		$bestRule = $this->getFittingRule();
-		$fittingAttrs = $this->getFittingFilterAttributes()['value'];
-
-		if (!$bestRule) {
-			return false;
-		}
-
-		$fittingAttrs = $this->prepareAttrs($fittingAttrs);
-
-		foreach ($this->getMetaTags() as $tag => $value) {
-			$tagValue = $this->prepareValue($bestRule->getData($tag), $fittingAttrs);
-			$this->metaTags[$tag] = $tagValue;
-		}
-
-		return true;
-	}
-
 	protected function prepareAttrs($attrs) {
 		foreach ($attrs as $name => $attr) {
 			if (is_array($attr)) {
@@ -160,6 +142,12 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 
 		return $tagValue;
 	}
+
+	protected function stripValue($value)
+    {
+        return preg_replace(array('/{(.*?)}:([a-zA-Z|]+)/', '/%[a-zA-Z_]+%/'), '', $value);
+        //return preg_replace_callback('/{(.*?)}:([a-zA-Z|]+)/', function() { return ''; }, $value);
+    }
 
 	protected function interpret($string) {
 		$processed = $string;
@@ -242,8 +230,8 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		return $attrCode;
 	}
 
-	protected function getFittingRule() {
-		if (is_null($this->fittingRule)) {
+	protected function getFittingRules() {
+		if (is_null($this->fittingRules)) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['id'];
 
 			$best = array();
@@ -251,24 +239,10 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 			$rules = $this->getRules();
 			$numFittingAttrs = count($fittingAttrs);
 
-            /*function count_r($array, $i = 0){
-                foreach($array as $k){
-                    if(is_array($k)){ $i += count_r($k, 1); }
-                    else{ $i++; }
-                }
-                return $i;
-            }
-            $numFittingAttrs = count_r($fittingAttrs);*/
-
-
-
-            //Zend_Debug::dump($rules->count());
-			//Zend_Debug::dump($rules->getSelect()->assemble()); die(__METHOD__);
-
 			foreach ($rules as $key => $rule) {
 				if (!($attrs = $rule->getSeoOptionFilters())) {
 					$attrs = $rule->getSeoAttributes();
-					$default = $rule;
+					$default[$rule->getContext()] = $rule;
 				}
 
 				$parts = explode(';', $attrs);
@@ -282,10 +256,6 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 					$id = isset($condParts[1]) ? $this->handleSeoAttributes($condParts[1]) : null;
 					$fittingId = $this->handleSeoAttributes($fittingAttrs[$attr]);
 
-					//Zend_Debug::dump($condition); //die(__METHOD__);
-					//Zend_Debug::dump($id); //die(__METHOD__);
-					//Zend_Debug::dump($fittingId); //die(__METHOD__);
-
 					if ($id && $fittingId === $id) {
 						$best[$key]++;
 					} elseif (!$id) {
@@ -295,14 +265,16 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 
 				// If set of rules is only with seo_option_filters without default rule
                 // then we shouldn't check it, otherwise we check if default and current rule is not equal
-				if ((!$default || ($default->getId() != $rule->getId())) && $numFittingAttrs === $best[$key]) {
-					$this->fittingRule = $rule;
-					break;
+				if ((!isset($default[$rule->getContext()]) || ($default[$rule->getContext()]->getId() != $rule->getId()))
+                    && $numFittingAttrs === $best[$key]
+                ) {
+					$this->fittingRules[$rule->getContext()] = $rule;
+					//break;
 				}
 			}
 
-			if (!$this->fittingRule && $default) {
-				$this->fittingRule = $default;
+			if (!$this->fittingRules && $default) {
+				$this->fittingRules = $default;
 			}
 
 			//ksort($best);
@@ -312,7 +284,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 			//$this->fittingRule = $rules->getItems()[end($best)];
 		}
 
-		return $this->fittingRule;
+		return $this->fittingRules;
 	}
 
 	protected function getAdditionalValues() {
@@ -332,45 +304,64 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		return false;
 	}
 
-	public function getMetaTags() {
+	/*public function getMetaTags() {
 		return $this->metaTags;
-	}
-
-	protected function changeHeadMetaTags() {
-		$prepared = $this->prepareMetaTags();
-
-		/** @var Mage_Page_Block_Html_Head $head */
-		if ($head = Mage::app()->getLayout()->getBlock('head')) {
-			$metaTags = $this->getMetaTags();
-			foreach($metaTags as $tag => $value) {
-				//Zend_Debug::dump($value);
-				//Zend_Debug::dump($head->getData($tag));
-
-
-                if (Mage::getStoreConfig('popov_section/settings/allow_change_meta_' . $tag)) {
-                    //if ($value && $this->canOverwriteDefaultMetaTags()) {
-                    $head->setData($tag, $value);
-                    //}
-                }
-
-			}
-			Mage::dispatchEvent('p_meta_tags_change_after', array('block' => $head));
-		}
-	}
-
-	/**
-	 * @todo Create admin GUI and add this option
-	 */
-	/*protected function canOverwriteDefaultMetaTags() {
-		return true;
 	}*/
 
-	/**
-	 * @return bool
-	 * @deprecated
-	 */
-	/*protected function getGeneralEn`ingOfMetaTags() {
-		return false;
-	}*/
+    public function prepareTags()
+    {
+        $bestRules = $this->getFittingRules();
+        $fittingAttrs = $this->getFittingFilterAttributes()['value'];
 
+        if (!$bestRules) {
+            return false;
+        }
+
+        $fittingAttrs = $this->prepareAttrs($fittingAttrs);
+
+        $this->tags = array();
+        foreach ($bestRules as /*$tag => */$rule) {
+            $tagValue = $this->prepareValue($rule->getContent(), $fittingAttrs);
+            $tagValue = $this->stripValue($tagValue);
+            $this->tags[$rule->getContext()] = $tagValue;
+        }
+
+        return $this->tags;
+    }
+
+	protected function changeTags()
+    {
+        $metaTags = $this->prepareTags();
+        foreach($metaTags as $tag => $value) {
+            if (Mage::getStoreConfig('popov_section/settings/allow_change_' . $tag)) {
+                $method = (strpos($tag, 'meta') !== false)
+                    ? 'meta'
+                    : $tag;
+
+                $method = 'change' . ucfirst(ucwords($method));
+                #if (!method_exists($this, $method)) {
+                #    Mage::throwException(sprintf('There is no registered handler for "%s" tag', $tag));
+                #}
+                $this->{$method}($value, $tag);
+            }
+
+        }
+	}
+
+	protected function changeMeta($value, $tag = null)
+    {
+        /** @var Mage_Page_Block_Html_Head $head */
+        if ($head = Mage::app()->getLayout()->getBlock('head')) {
+            $name = substr($tag, 4); // skip "meta_"
+            $head->setData($name, $value);
+
+            Mage::dispatchEvent('p_meta_tags_change_after', array('block' => $head));
+        }
+    }
+
+	protected function changeH1($value, $tag = null)
+    {}
+
+	protected function changeDescription($value, $tag = null)
+    {}
 }

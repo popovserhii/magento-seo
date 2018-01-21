@@ -64,6 +64,11 @@ class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Gr
 			'index'  => 'type'
 		));
 
+		$this->addColumn('context', array(
+			'header' => $this->__('Rule context'),
+			'index'  => 'context'
+		));
+
 		/*$this->addColumn('category_id', array(
 			'header'   => $helper->__('Category'),
 			'index'    => 'category_id',

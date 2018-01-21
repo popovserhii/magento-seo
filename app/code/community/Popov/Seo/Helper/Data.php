@@ -42,7 +42,27 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		return count($filters);
 	}
 
-	public function urlPageNormalize($url) {
+    /**
+     * Get pager block
+     *
+     * @return Mage_Page_Block_Html_Pager $tool
+     */
+    public function getToolbar() {
+        static $tool;
+
+        if (!$tool) {
+            $tool = Mage::app()->getLayout()->createBlock('page/html_pager')
+                ->setLimit(Mage::app()->getLayout()->createBlock('catalog/product_list_toolbar')->getLimit());
+        }
+
+        return $tool;
+    }
+
+    public function getPage() {
+        return (int) $this->getToolbar()->getRequest()->getParam($this->getToolbar()->getPageVarName());
+    }
+
+    public function urlPageNormalize($url) {
 		//$url = 'http://example.com/ru/women/where/item-type/джинсы/p/1';
 		$prepare = preg_replace('#^(.*)/p/1[\D]*$#', '$1', $url);
 
@@ -436,5 +456,4 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		
 		return (trim($baseUrl, '/') === trim($currentUrl, '/')) ? true : false;
 	}
-	
 }

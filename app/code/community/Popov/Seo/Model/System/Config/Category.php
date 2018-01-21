@@ -20,8 +20,7 @@ class Popov_Seo_Model_System_Config_Category
 		$options = array('' => $helper->__('Choose category'));
 		$categories = $this->getCategoriesValues(1);
 
-		foreach ($categories as $category)
-		{
+		foreach ($categories as $category) {
 			$options[$category['value']] =  $category['label'];
 		}
 
@@ -40,8 +39,7 @@ class Popov_Seo_Model_System_Config_Category
 		$tree = $categoryModel->getCategories($parentId);
 		$node = null;
 
-		foreach ($tree as $root)
-		{
+		foreach ($tree as $root) {
 			$node = $root;
 		}
 
@@ -61,8 +59,7 @@ class Popov_Seo_Model_System_Config_Category
 		$values[$node->getId()]['value'] = $node->getId();
 		$values[$node->getId()]['label'] = str_repeat('--', $level).$node->getName();
 
-		foreach ($node->getChildren() as $child)
-		{
+		foreach ($node->getChildren() as $child) {
 			$values = $this->_buildCategoriesValues($child, $values, $level);
 		}
 

@@ -83,7 +83,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Form extends Mage_Adminhtml_Block_Widg
 
 		$fieldset->addField('context', 'select', array(
 			'label'     => $this->__('Context'),
-			'name'      => 'type',
+			'name'      => 'context',
 			'required'  => true,
 			'options'   => Mage::getModel('Popov_Seo_Model_System_Config_Context')->toOptionArray(),
 		));

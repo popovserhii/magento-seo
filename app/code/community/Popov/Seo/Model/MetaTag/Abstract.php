@@ -352,7 +352,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
     {
         /** @var Mage_Page_Block_Html_Head $head */
         if ($head = Mage::app()->getLayout()->getBlock('head')) {
-            $name = substr($tag, 4); // skip "meta_"
+            $name = substr($tag, 5); // skip "meta_"
             $head->setData($name, $value);
 
             Mage::dispatchEvent('p_meta_tags_change_after', array('block' => $head));

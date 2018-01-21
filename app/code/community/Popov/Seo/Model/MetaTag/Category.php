@@ -14,7 +14,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	protected $isHandlerAttached = false;
 
 	protected function preRun() {
-		//$this->prepareLinkRel(); // moved to helper
+		$this->prepareLinkRel(); // moved to helper
 	}
 
 	protected function postRun()
@@ -170,11 +170,16 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		if (!$tool && ($category = Mage::registry('current_category'))) {
 		    /** @var Popov_Seo_Helper_Data $seoHelper */
 		    $seoHelper = Mage::helper('popov_seo');
-			$prodCol = $category->getProductCollection()
-                ->addAttributeToFilter('status', 1)
-                ->addAttributeToFilter('visibility', array('in' => array(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
+            $filteredList = Mage::app()->getLayout()
+                ->getBlockSingleton('catalog/product_list')
+                ->getLoadedProductCollection();
+
+			//$prodCol = $category->getProductCollection()
+            //    ->addAttributeToFilter('status', 1)
+            //    ->addAttributeToFilter('visibility', array('in' => array(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH)));
 			//$tool = Mage::app()->getLayout()->createBlock('page/html_pager')->setLimit(Mage::app()->getLayout()->createBlock('catalog/product_list_toolbar')->getLimit())->setCollection($prodCol);
-			$tool = $seoHelper->getToolbar()->setCollection($prodCol);
+
+            $tool = $seoHelper->getToolbar()->setCollection($filteredList);
 		}
 
 		return $tool;
@@ -209,7 +214,8 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 				}
 
 				if ($linkPrev) {
-					$head->addLinkRel('prev', Mage::helper('popov_seo')->urlPageNormalize($prevUrl));
+					//$head->addLinkRel('prev', Mage::helper('popov_seo')->urlPageNormalize($prevUrl));
+					$head->addLinkRel('prev', $prevUrl);
 				}
 				if ($linkNext) {
 					$head->addLinkRel('next', $nextUrl);

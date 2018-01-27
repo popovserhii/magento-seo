@@ -179,6 +179,9 @@
             <review_product_list>
                 <model>Popov_Seo_Model_MetaTag_Product</model>
             </review_product_list>
+            <quickview_index_view>
+                <model>Popov_Seo_Model_MetaTag_Product</model>
+            </quickview_index_view>
             <catalog_category_view>
                 <model>Popov_Seo_Model_MetaTag_Category</model>
             </catalog_category_view>

@@ -17,17 +17,19 @@ class Popov_Seo_Model_MetaTag_Factory {
 	 * @param string $namespace
 	 * @return Popov_Seo_Model_MetaTag_MetaInterface
 	 */
-	public static function create($name/*, $namespace = Popov_Seo_Model_MetaTag_Factory::SEO_NAMESPACE*/) {
-
+	public static function create($name)
+    {
 		//$className = $namespace . '_' . ucfirst($name);
-        $className = self::getSeoClass($name);
+        //$className = self::getSeoClass($name);
+        $className = self::getSeoHelper()->getSeoClass($name);
 
-		if (!class_exists($className)) {
-			Mage::throwException(sprintf('Cannot found class %s', $className));
-		}
+        if (!class_exists($className)) {
+            Mage::throwException(sprintf('Cannot found class %s', $className));
+        }
 
-		$rules = Mage::getModel('popov_seo/rule')->getCollection()
-			->addFieldToFilter('type', $name)
+        $type = self::getSeoHelper()->getSeoType($name);
+        $rules = Mage::getModel('popov_seo/rule')->getCollection()
+			->addFieldToFilter('type', $type)
 			->addFieldToFilter('is_active', 1)
 			->addFieldToFilter('store_id', array(
 				array('finset' => 0), // all stores
@@ -41,15 +43,15 @@ class Popov_Seo_Model_MetaTag_Factory {
 
 	public static function canCreate($name)
     {
-        return class_exists(self::getSeoClass($name));
+        return class_exists(self::getSeoHelper()->etSeoClass($name));
     }
 
-    public static function getSeoClass($seoName)
+    /**
+     * @return Popov_Seo_Helper_Data
+     */
+    protected static function getSeoHelper()
     {
-        //$handlerClass = Mage::getModel((string) Mage::getConfig()->getNode('popov_seo/handlers/' . $seoName));
-        $handlerClass = (string) Mage::getConfig()->getNode('popov_seo/handlers/' . $seoName)->model;
-
-        return $handlerClass;
+        return Mage::helper('popov_seo');
     }
 
 }

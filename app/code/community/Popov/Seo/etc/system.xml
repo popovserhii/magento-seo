@@ -1,14 +1,7 @@
 <?xml version="1.0" ?>
 <config>
-	<tabs>
-		<popov module="popov_seo" translate="label">
-			<label>Popov</label>
-			<sort_order>10000</sort_order>
-		</popov>
-	</tabs>
-
 	<sections>
-		<popov_section module="popov_seo" translate="label">
+		<popov_seo module="popov_seo" translate="label">
 			<label>SEO</label>
 			<sort_order>200</sort_order>
 			<show_in_default>1</show_in_default>
@@ -24,6 +17,15 @@
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
 					<fields>
+
+                        <site_verification_heading  translate="label">
+                            <label>Site Verification</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </site_verification_heading>
 						<google_site_verification translate="label comment">
 							<label>Google Site Verification Code</label>
 							<frontend_type>text</frontend_type>
@@ -40,46 +42,16 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</yandex_site_verification>
-						<dynamic_title translate="label comment">
-							<label>Dynamic title</label>
-							<comment>Title will be dynamically changed according to the rule</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</dynamic_title>
-						<rel_prev_next translate="label comment">
-							<label>Enable prev/next rel</label>
-							<comment>Add rel=”prev” and rel=”next” link tag attributes in the head tag for pages</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>11</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</rel_prev_next>
-						<rel_alternate_hreflang translate="label comment">
-							<label>Setting language versions</label>
-							<comment>Add attributes rel="alternate" hreflang="x" relative to stores.</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>11</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</rel_alternate_hreflang>
-						<rel_alternate_hreflang_country translate="label comment">
-							<label>Setting default country code for "hreflang"</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>11</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</rel_alternate_hreflang_country>
-						<canonical_link translate="label comment">
+
+                        <canonical_heading translate="label">
+                            <label>Canonical</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </canonical_heading>
+                        <canonical translate="label comment">
 							<label>Enable canonical meta tag</label>
 							<comment>Use meta tag canonical reference for categories</comment>
 							<frontend_type>select</frontend_type>
@@ -88,84 +60,149 @@
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-						</canonical_link>
-						<index_php translate="label comment">
-							<label>Remove index.php from URL</label>
-							<comment><![CDATA[Magento remove index.php from URL via 301 redirect.<br />
+						</canonical>
+                        <canonical_exclude_pages translate="label comment">
+                            <label>Exclude canonical on pages</label>
+                            <comment><![CDATA[Add one page per line. For example: <br />
+                            catalog_product_view<br />
+                            catalog_category_layered
+                            ]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <canonical>1</canonical>
+                            </depends>
+                        </canonical_exclude_pages>
+
+
+                        <reditect_heading translate="label">
+                            <label>301 Redirect</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </reditect_heading>
+                        <index_php translate="label comment">
+                            <label>Remove index.php from URL</label>
+                            <comment><![CDATA[Magento remove index.php from URL via 301 redirect.<br />
 							You also should set the <b>"Use Web Server Rewrites"</b> option under <b>"Search Engines Optimization"</b> to <b>“Yes”</b>.]]></comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>12</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</index_php>
-						<trailing_slash translate="label comment">
-							<label>Remove trailing slash</label>
-							<comment>Magento remove trailing slash automatically to every URL via 301 redirect</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>13</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</trailing_slash>
-						<to_lowercase translate="label comment">
-							<label>Redirect uppercase URL to lowercase</label>
-							<comment>Magento convert uppercase URL to lowercase via 301 redirect</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>15</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</to_lowercase>
-						<multiple_slashes translate="label comment">
-							<label>Remove multiple slashes in URL</label>
-							<comment>Example: http://example.com/path///to//file -> http://example.com/path/to/file</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</multiple_slashes>
-						<without_store translate="label comment">
-							<label>Redirect to base store if URL cannot contain store</label>
-							<comment>Option "Add code to store the links (URLs)" must be enabled</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>25</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</without_store>
-						<non_secure_url translate="label comment">
-							<label>Redirect non secure URL to http protocol</label>
-							<comment>If page can be access through http protocol than that page will be redirect from https to http</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>26</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</non_secure_url>
-						<first_page translate="label comment">
-							<label>Redirect first page to url without page</label>
-							<comment><![CDATA[]]></comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>27</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</first_page>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </index_php>
+                        <trailing_slash translate="label comment">
+                            <label>Remove trailing slash</label>
+                            <comment>Magento remove trailing slash automatically to every URL via 301 redirect</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </trailing_slash>
+                        <to_lowercase translate="label comment">
+                            <label>Redirect uppercase URL to lowercase</label>
+                            <comment>Magento convert uppercase URL to lowercase via 301 redirect</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </to_lowercase>
+                        <multiple_slashes translate="label comment">
+                            <label>Remove multiple slashes in URL</label>
+                            <comment>Example: http://example.com/path///to//file -> http://example.com/path/to/file</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </multiple_slashes>
+                        <without_store translate="label comment">
+                            <label>Redirect to base store if URL cannot contain store</label>
+                            <comment>Option "Add code to store the links (URLs)" must be enabled</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </without_store>
+                        <non_secure_url translate="label comment">
+                            <label>Redirect non secure URL to http protocol</label>
+                            <comment>If page can be access through http protocol than that page will be redirect from https to http</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>26</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </non_secure_url>
+                        <first_page translate="label comment">
+                            <label>Redirect first page to url without page</label>
+                            <comment><![CDATA[]]></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>27</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </first_page>
+
+
+                        <other_heading translate="label">
+                            <label>Other settings</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </other_heading>
+                        <rel_prev_next translate="label comment">
+                            <label>Enable Link Rel="next/prev"</label>
+                            <comment>Add rel=”prev” and rel=”next” link tag attributes in the head tag for pages</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rel_prev_next>
+                        <rel_alternate_hreflang translate="label comment">
+                            <label>Enable Link Rel="alternate" and hreflang</label>
+                            <comment>Add attributes rel="alternate" hreflang="x" relative to stores.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rel_alternate_hreflang>
+                        <rel_alternate_hreflang_country translate="label comment">
+                            <label>Setting default country code for "hreflang"</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>36</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </rel_alternate_hreflang_country>
+
 						<pager translate="label comment">
 							<label>Add page number to meta tags</label>
 							<comment>Show page number in title, keywords and description</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>30</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -176,7 +213,7 @@
 							<!--<comment>Show page number in title, keywords and description</comment>-->
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>32</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -187,7 +224,7 @@
 							<!--<comment>Show page number in title, keywords and description</comment>-->
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>32</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -198,7 +235,7 @@
 							<!--<comment>Show page number in title, keywords and description</comment>-->
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>32</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -209,7 +246,7 @@
 							<comment>H1 rules will be applied if this option is selected</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>32</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -220,7 +257,7 @@
 							<comment>Description rules will be applied if this option is selected</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>32</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -231,7 +268,7 @@
 							<comment>NOINDEX, NOFOLLOW in robots meta tag</comment>
 							<frontend_type>multiselect</frontend_type>
 							<source_model>popov_seo/filterLinks_source_noindex</source_model>
-							<sort_order>35</sort_order>
+							<sort_order>40</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -272,6 +309,6 @@
 					</fields>
 				</settings>
 			</groups>
-		</popov_section>
+		</popov_seo>
 	</sections>
 </config>

@@ -32,10 +32,14 @@ class Popov_Seo_Model_MetaTag_Product extends Popov_Seo_Model_MetaTag_Abstract {
 						if ($checkedSeoAttr = $this->registerSeoFilter($attr->getAttributeCode())) {
 
 
-
-							$fitting['id'][$checkedSeoAttr] = $attr->getSource()->getOptionId($attr->getAttributeCode());
-							$fitting['value'][$checkedSeoAttr] = $product->getResource()->getAttribute($attr->getAttributeCode())->getFrontend()->getValue($product);
-
+                            if (method_exists($attr->getSource(), 'getOptionId')) {
+                                $fitting['id'][$checkedSeoAttr] =
+                                    $attr->getSource()->getOptionId($attr->getAttributeCode());
+                                $fitting['value'][$checkedSeoAttr] = $product->getResource()
+                                    ->getAttribute($attr->getAttributeCode())
+                                    ->getFrontend()
+                                    ->getValue($product);
+                            }
 
 							/*
 							$attrFront = $filter->getFilter()->getAttributeModel()->getFrontend();
@@ -102,4 +106,11 @@ class Popov_Seo_Model_MetaTag_Product extends Popov_Seo_Model_MetaTag_Abstract {
 			$fitting['value'][$attrCode] = $product->{$method}();
 		}
 	}
+
+    public function prepareCanonical()
+    {
+        if ($product = Mage::registry('current_product')) {
+            return $product->getUrlModel()->getUrl($product, array('_ignore_category' => true, '_nosid' => true));
+        }
+    }
 }

@@ -45,7 +45,8 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		//... if need can be other meta tags
 	);
 
-	public function __construct(Popov_Seo_Model_Resource_Rule_Collection $rules) {
+	public function __construct(Popov_Seo_Model_Resource_Rule_Collection $rules)
+    {
 		$this->rules = $rules;
 	}
 
@@ -72,11 +73,13 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	 * @return string
 	 * @todo return object Type (category, product)
 	 */
-	public function getType() {
+	public function getType()
+    {
 		return $this->rules->getFirstItem()->getType();
 	}
 
-	public function handleSeoAttributes($attrs) {
+	public function handleSeoAttributes($attrs)
+    {
 		if (!is_array($attrs)) {
 			/** @var Popov_Base_Helper_String $stringHelper */
 			$stringHelper = Mage::helper('popov_base/string');
@@ -93,7 +96,8 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	 * @param string $name Tag name (title) or meta property (description, keywords...)
 	 * @return string
 	 */
-	public function getValueOf($name) {
+	public function getValueOf($name)
+    {
 		if (isset($this->metaTags[$name])) {
 			return $this->metaTags[$name];
 		}
@@ -107,7 +111,8 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	 * @param Popov_Seo_Model_Rule $rule
 	 * @return $this
 	 */
-	public function addRule(Popov_Seo_Model_Rule $rule) {
+	public function addRule(Popov_Seo_Model_Rule $rule)
+    {
 		$this->rules->addItem($rule);
 	}
 
@@ -116,11 +121,13 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 	 *
 	 * @return Popov_Seo_Model_Resource_Rule_Collection
 	 */
-	public function getRules() {
+	public function getRules()
+    {
 		return $this->rules;
 	}
 
-	protected function prepareAttrs($attrs) {
+	protected function prepareAttrs($attrs)
+    {
 		foreach ($attrs as $name => $attr) {
 			if (is_array($attr)) {
 				$attrs[$name] = implode(', ', $this->handleSeoAttributes($attr));
@@ -297,16 +304,13 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		return $vars;
 	}
 
-	protected function hasSpecialChar($string) {
+	protected function hasSpecialChar($string)
+    {
 		if(!preg_match('/^[a-zA-Z0-9_]+$/', $string)) {
 			return true;
 		}
 		return false;
 	}
-
-	/*public function getMetaTags() {
-		return $this->metaTags;
-	}*/
 
     public function prepareTags()
     {

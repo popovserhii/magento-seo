@@ -13,64 +13,26 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 	protected $isHandlerAttached = false;
 
-	protected function preRun() {
-		$this->prepareLinkRel(); // moved to helper
+	protected function preRun()
+    {
+		$this->prepareLinkRel();
+		//$this->prepareCanonical();
 	}
 
 	protected function postRun()
     {
-		// unset current category description
-		//if (Mage::helper('popov_seo')->hasFilters()) {
-		//	$currentCategory = Mage::registry('current_category');
-		//	$currentCategory->setData('description', '');
-		//}
-
-		//$this->changeH1TitleTag();
-
 		$this->noindex('catalog/layer');
 		$this->index('catalog/layer');
 
 		$this->order();
 
 		$this->unsetDescription();
-        //if (Mage::getStoreConfig('popov_section/settings/allow_change_content')) {
-        //    $this->changeContent();
-        //    $this->attachHandler();
-        //}
 
 		parent::postRun();
 	}
 
-
-
-	/*protected function convertH1() {
-		if (Mage::getStoreConfig('popov_section/settings/dynamic_title')) {
-			$fittingAttrs = $this->getFittingFilterAttributes()['value'];
-			$bestRule = $this->getFittingRule();
-			//Zend_Debug::dump($fittingAttrs); die(__METHOD__);
-			if (!$bestRule) {
-				return false;
-			}
-
-			$tagValue = trim($this->prepareValue($bestRule->getData('h1_title'), $this->prepareAttrs($fittingAttrs)));
-
-		}
-
-		return false;
-	}*/
-
-	/*protected function modifyContent($name)
+	protected function noindex($layerModel)
     {
-        //if (Mage::getStoreConfig('popov_section/settings/dynamic_' . $name)) {
-            $fittingAttrs = $this->getFittingFilterAttributes()['value'];
-            $bestRule = $this->getFittingRules();
-            $outputHtml = trim($this->prepareValue($bestRule->getData($name), $this->prepareAttrs($fittingAttrs)));
-        //}
-
-        return $outputHtml;
-    }*/
-
-	protected function noindex($layerModel) {
 		/** @var $head Mage_Page_Block_Html_Head */
 		if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
 			$noIndex = false;
@@ -185,7 +147,17 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		return $tool;
 	}
 
-	protected function prepareLinkRel() {
+    public function prepareCanonical()
+    {
+        if (($category = Mage::registry('current_category'))) {
+            $url = $category->getUrlModel()->getCategoryUrl($category);
+
+            return $url;
+        }
+    }
+
+	protected function prepareLinkRel()
+    {
 		if (Mage::getStoreConfig('popov_section/settings/rel_prev_next')) {
 			/** @var Mage_Page_Block_Html_Head $head */
 			$head = Mage::app()->getLayout()->getBlock('head');
@@ -270,20 +242,21 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		return $fitting;
 	}
 
-	protected function getAdditionalValues() {
+	protected function getAdditionalValues()
+    {
 		$values = parent::getAdditionalValues();
 		$values['categories'] = implode(' ', $this->getCategoryPathNames());
 
 		return $values;
 	}
 
-	public function getRules() {
+	public function getRules()
+    {
 		static $filterSet = false;
 
 		if (!$filterSet) {
 			$attrs = array_keys($this->getFittingFilterAttributes()['id']);
 			$originAttrs = $this->handleSeoAttributes($attrs);
-			// $_products->addAttributeToFilter('id', array('in' => array(1,4,98)));
 
             // add category as default value
             $this->rules->addFieldToFilter('seo_attributes', array('in' => array('category', implode(';', $originAttrs))));
@@ -294,16 +267,14 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		return $this->rules;
 	}
 
-	private function getPage() {
+	private function getPage()
+    {
 	    return (int) $this->getToolbar()->getRequest()->getParam($this->getToolbar()->getPageVarName());
     }
 
-    /*private function isPageInUrl() {
-        $tool = $this->getToolbar();
-        return ($this->getPage()) && $tool->getCollection()->getSize();
-    }*/
 
-	public function getCategoryPathNames() {
+	public function getCategoryPathNames()
+    {
 		$category = Mage::getModel('catalog/category')->load(Mage::registry('current_category')->getId());
 		$coll = $category->getResourceCollection();
 		$pathIds = array_slice($category->getPathIds(), 2);

@@ -34,10 +34,10 @@
 						<children>
 							<config>
 								<children>
-									<popov_section translate="title" module="popov_seo">
+									<popov_seo translate="title" module="popov_seo">
 										<title>SEO Configuration</title>
 										<sort_order>100</sort_order>
-									</popov_section>
+									</popov_seo>
 								</children>
 							</config>
 						</children>

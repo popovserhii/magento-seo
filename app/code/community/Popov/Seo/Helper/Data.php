@@ -9,60 +9,124 @@
  */ 
 class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    /**
+     * @var Mage_Page_Block_Html_Head
+     */
+    protected $head;
+
+    /**
+     * @var Popov_Seo_Model_MetaTag_Abstract
+     */
+    protected $seoAdapter = null;
+
+    protected $allowChangeCanonical = null;
+
     public function getSeoName()
     {
         static $seoName = null;
-        $metaTags = [
-            'catalog_product_view' => 'Catalog Product',
-            'catalog_category_view' => 'Catalog Category',
-            //'filter' => 'Layered Navigation',
-        ];
 
-        /** @var Popov_Base_Helper_String $stringHelper */
         if (is_null($seoName)) {
-            $stringHelper = Mage::helper('popov_base/string');
-            $moduleName = Mage::app()->getRequest()->getModuleName();
-            $fullActionName = Mage::app()->getFrontController()->getAction()->getFullActionName();
-            $seoName = false;
-            if (isset($metaTags[$fullActionName])) {
-                $actionName = str_replace($moduleName . '_', '', $fullActionName);
-                $seoName = $stringHelper->create($actionName)->explode('_');
-                $seoName = array_shift($seoName);
-            } /*elseif ($this->hasFilters() && isset($metaTags['filter'])) {
-                $seoName = 'filter';
-            }*/
+            $seoName = Mage::app()->getFrontController()->getAction()->getFullActionName();
         }
 
         return $seoName;
     }
 
-    public function hasFilters() {
+    public function getSeoType($seoName = null)
+    {
+        static $seoType = null;
+
+        if (is_null($seoType)) {
+            $moduleName = Mage::app()->getRequest()->getModuleName();
+            $fullActionName = $seoName ?: Mage::app()->getFrontController()->getAction()->getFullActionName();
+
+            $actionName = str_replace($moduleName . '_', '', $fullActionName);
+            $seoType = explode('_', $actionName);
+            $seoType = array_shift($seoType);
+        }
+
+        return $seoType;
+    }
+
+
+    public function getSeoClass($seoName = null)
+    {
+        $seoName = $seoName ?: $this->getSeoName();
+        return (string) Mage::getConfig()->getNode('popov_seo/handlers/' . $seoName)->model;
+    }
+
+    public function getSeoAdapter()
+    {
+        if (is_null($this->seoAdapter)) {
+            $this->seoAdapter = false;
+            if (Popov_Seo_Model_MetaTag_Factory::canCreate($seoName = $this->getSeoName())) {
+                $this->seoAdapter = Popov_Seo_Model_MetaTag_Factory::create($seoName);
+            }
+        }
+        return $this->seoAdapter;
+    }
+
+    public function getHead()
+    {
+        if (!$this->head) {
+            $this->head = Mage::app()->getLayout()->getBlock('head');
+        }
+
+        return $this->head;
+    }
+
+    public function hasFilters()
+    {
 		$filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
 
 		return count($filters);
 	}
 
+    public function allowChangeCanonical()
+    {
+        if (is_null($this->allowChangeCanonical)) {
+            $allow = false;
+            if (Mage::getStoreConfig('popov_seo/settings/canonical')) {
+                $allow = true;
+                $part = explode("\n", Mage::getStoreConfig('popov_seo/settings/canonical_exclude_pages'));
+                foreach ($part as $page) {
+                    if ($this->getSeoName() === trim($page)) {
+                        $allow = false;
+                    }
+                }
+            }
+            $this->allowChangeCanonical = $allow;
+        }
+
+        return $this->allowChangeCanonical;
+    }
+
     /**
      * Get pager block
      *
-     * @return Mage_Page_Block_Html_Pager $tool
+     * @return Mage_Page_Block_Html_Pager
      */
-    public function getToolbar() {
+    public function getToolbar()
+    {
         static $tool;
 
         if (!$tool) {
-            $tool = Mage::app()->getLayout()->createBlock('page/html_pager')
+            $tool = Mage::app()
+                ->getLayout()
+                ->createBlock('page/html_pager')
                 ->setLimit(Mage::app()->getLayout()->createBlock('catalog/product_list_toolbar')->getLimit());
         }
 
         return $tool;
     }
 
-    public function getPage() {
+    public function getPage()
+    {
         return (int) $this->getToolbar()->getRequest()->getParam($this->getToolbar()->getPageVarName());
     }
 
-    public function urlPageNormalize($url) {
+    public function urlPageNormalize($url)
+    {
 		//$url = 'http://example.com/ru/women/where/item-type/джинсы/p/1';
 		$prepare = preg_replace('#^(.*)/p/1[\D]*$#', '$1', $url);
 
@@ -74,12 +138,13 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	 *
 	 * Here is 301 redirect which cannot place in .htaccess or analog file
 	 */
-	public function redirect301() {
+	public function redirect301()
+    {
 		#RewriteRule     ^index.php/admin/(.*)$   	http://%{HTTP_HOST}/en/$1    	[R=301,NC,L]    # Permanent Move
 		$list = array(
 			//'^/index.php/admin/(.*)$' => "http://{$_SERVER['HTTP_HOST']}/en/$1",
-			'(.*)/mode/list$' => "http://{$_SERVER['HTTP_HOST']}/$1",
-			'(.*)/mode/grid$' => "http://{$_SERVER['HTTP_HOST']}/$1",
+			//'(.*)/mode/list$' => "http://{$_SERVER['HTTP_HOST']}/$1",
+			//'(.*)/mode/grid$' => "http://{$_SERVER['HTTP_HOST']}/$1",
 		);
 
 		foreach ($list as $from => $to) {
@@ -94,8 +159,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	}
 
 
-	public function redirectIndexPhp() {
-		if (Mage::getStoreConfig('popov_section/settings/index_php')
+	public function redirectIndexPhp()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/index_php')
             && Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES)) {
             $currentUrl = Mage::helper('core/url')->getCurrentUrl();
             if (strpos($currentUrl, 'index.php/') !== false) {
@@ -111,8 +177,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 	}
 
-	public function redirectTrailingSlash() {
-		if (Mage::getStoreConfig('popov_section/settings/trailing_slash')) {
+	public function redirectTrailingSlash()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/trailing_slash')) {
 			$currentUrl = Mage::helper('core/url')->getCurrentUrl();
 			if ($_SERVER['REQUEST_METHOD'] != 'POST' && !Mage::app()->getRequest()->isAjax()) {
 				$url = $currentUrl;
@@ -129,13 +196,13 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	/**
 	 * Redirect uppercase url to lowercase
 	 */
-	public function redirectToLowerCase() {
-		if (Mage::getStoreConfig('popov_section/settings/to_lowercase') && $this->isCheckedModule()) {
+	public function redirectToLowerCase()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/to_lowercase') && $this->isCheckedModule()) {
 			/** @var Mage_Core_Model_Url $url */
 			$url = Mage::getModel('core/url');
 			$url->parseUrl(Mage::helper('core/url')->getCurrentUrl());
 			$path = rawurldecode($url->getPath());
-
 			if ($path !== ($pathLower = mb_strtolower($path, 'UTF-8')) && !Mage::app()->getRequest()->isAjax()) {
 				$urlNew = $url->getRebuiltUrl($pathLower);
 				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
@@ -145,8 +212,10 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 	}
 
-	public function redirectMultipleSlashes() {
-		if (Mage::getStoreConfig('popov_section/settings/multiple_slashes') && preg_match('#[/]{2,}#', $_SERVER['REQUEST_URI'])) {
+	public function redirectMultipleSlashes()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/multiple_slashes')
+            && preg_match('#[/]{2,}#', $_SERVER['REQUEST_URI'])) {
 			$parts = array_filter(explode('/', $_SERVER['REQUEST_URI']));
 			$url = rtrim(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB), '/');
 			
@@ -156,7 +225,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 
 			header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
 			header('Location: ' . $url);
-			exit();
+			die();
 		}
 	}
 
@@ -165,10 +234,11 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	 *
 	 * @return bool
 	 */
-	public function redirectWithoutStore() {
+	public function redirectWithoutStore()
+    {
 		if (Mage::getStoreConfig('web/url/use_store')
 			&& $this->isCheckedModule()
-			&& Mage::getStoreConfig('popov_section/settings/without_store')
+			&& Mage::getStoreConfig('popov_seo/settings/without_store')
 			//&& !Mage::getBlockSingleton('page/html_header')->getIsHomePage()) {
 			&& !$this->isHomePage()) {
 			
@@ -180,93 +250,90 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 				$url = Mage::getBaseUrl() . $requestUri;
 				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
 				header('Location: ' . $url);
-				exit();
+				die();
 			}
 		}
 	}
 
-	public function redirectNonSecureUrl() {
-		if (Mage::getStoreConfig('popov_section/settings/non_secure_url') && $this->isCheckedModule()) {
+	public function redirectNonSecureUrl()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/non_secure_url') && $this->isCheckedModule()) {
 			$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https' : 'http';
 			if ($protocol === 'https') {
 				$url = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-				header('HTTP/1.1 301 Moved Permanently');
+                header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
 				header('Location: http://' . $url);
 				die();
 			}
 		}
 	}
 
-	public function redirectFirstPage() {
-		if (Mage::getStoreConfig('popov_section/settings/first_page')) {
+	public function redirectFirstPage()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/first_page')) {
 			$rawUrl = rtrim(rawurldecode($_SERVER['REQUEST_URI']), '/');
-			
 			if ($rawUrl !== ($url = $this->urlPageNormalize($rawUrl))) {
 				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
 				header('Location: ' . $url);
 				die();
 			}
-
 		}
 	}
 
-	public function addGoogleVerificationFor8080() {
-	
-		/** @var Mage_Page_Block_Html_Head $head */
-		$head = Mage::app()->getLayout()->getBlock('head');
+	public function addSiteVerification()
+    {
+        $head = $this->getHead();
 		$includes = $head->getIncludes();
 
-		if ($code = Mage::getStoreConfig('popov_section/settings/google_site_verification')) {
-			// md - IroTkpMFGodsAjsCBl4Bj7wMdV3JXXbE2xlw0rUfMic - google
-			// oodji - gCEjRSIqf7vyjTPi5gYw83WPps2e9j92T-iVaLlZtss - google
+		if ($code = Mage::getStoreConfig('popov_seo/settings/google_site_verification')) {
 			$includes .= '<meta name="google-site-verification" content="' . $code . '" />';
 		}
 		
-		//Zend_Debug::dump($code); die(__METHOD__);
-
-		if ($code = Mage::getStoreConfig('popov_section/settings/yandex_site_verification')) {
-			// oodji - 744e216c8214dd51 - yandex
+		if ($code = Mage::getStoreConfig('popov_seo/settings/yandex_site_verification')) {
 			$includes .= '<meta name="yandex-verification" content="' . $code . '" />';
 		}
 		
 		$head->setData('includes', $includes);
 	}
 
-	public function prepareCanonicalLink() {
-		if (Mage::getStoreConfig('popov_section/settings/canonical_link')) {
-			/** @var Mage_Page_Block_Html_Head $head */
-			$head = Mage::app()->getLayout()->getBlock('head');
-			if ($head) {
-				$head->addLinkRel('canonical', urldecode(Mage::helper('core/url')->getCurrentUrl()));
-			}
-		}
+    public function prepareMetaTags()
+    {
+        if ($seoAdapter = $this->getSeoAdapter()) {
+            $seoAdapter->run();
+        }
+    }
+
+    /**
+     * If there is none registered Seo Class than change canonical meta tag by default,
+     * otherwise use appropriate adapter
+     */
+	public function prepareCanonical()
+    {
+        if ($this->allowChangeCanonical() && ($head = $this->getHead())) {
+            if (($seoAdapter = $this->getSeoAdapter()) && method_exists($seoAdapter, 'prepareCanonical')) {
+                $url = $seoAdapter->prepareCanonical();
+            }
+            if (empty($url)) {
+                $url = urldecode(Mage::helper('core/url')->getCurrentUrl());
+            }
+
+            $url = Mage::getModel('core/url')->sessionUrlVar($url);
+
+            $head->addLinkRel('canonical', $url);
+        }
 	}
 
-	public function prepareHreflang() {
-		if (Mage::getStoreConfig('popov_section/settings/rel_alternate_hreflang')) {
-			/** @var Mage_Page_Block_Html_Head $head */
-			$head = Mage::app()->getLayout()->getBlock('head');
-			if ($head) {
-				$head->addLinkRel('canonical', urldecode(Mage::helper('core/url')->getCurrentUrl()));
-
+	public function prepareHreflang()
+    {
+		if (Mage::getStoreConfig('popov_seo/settings/rel_alternate_hreflang')) {
+            if ($head = $this->getHead()) {
 				/** @link http://stackoverflow.com/a/5867890 */
 				$stores = Mage::app()->getWebsite()->getStores();
-
 				$includes = '';
 				$template = '<link rel="alternate" hreflang="%s" href="%s" />';
 				$currentStoreId = Mage::app()->getStore()->getId();
-				$useCountryByDefault = Mage::getStoreConfig('popov_section/settings/rel_alternate_hreflang_country');
-				//Zend_Debug::dump($useCountryByDefault); die(__METHOD__);
 				foreach ($stores as $store) {
                     Mage::app()->setCurrentStore($store->getId());
-                    /*$localeCode = Mage::getStoreConfig('general/locale/code', $store->getId());
-                    if ($useCountryByDefault) {
-                        $languageCode = substr(strtolower($localeCode), 0, 2);
-                        $countryCode = strtolower(Mage::getStoreConfig('general/country/default', $store));
-                        $hrefLang = $languageCode . '-' . $countryCode;
-                    } else {
-                        $hrefLang = strtolower(str_replace('_', '-', $localeCode));
-                    }*/
                     $hrefLang = $this->getHrefLang($store);
                     $includes .= sprintf($template, $hrefLang, rtrim($store->getCurrentUrl(false), '/'));
 				}
@@ -282,7 +349,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
             $store = Mage::app()->getStore();
         }
 
-        $useCountryByDefault = Mage::getStoreConfig('popov_section/settings/rel_alternate_hreflang_country');
+        $useCountryByDefault = Mage::getStoreConfig('popov_seo/settings/rel_alternate_hreflang_country');
         $localeCode = Mage::getStoreConfig('general/locale/code', $store->getId());
         if ($useCountryByDefault) {
             $languageCode = substr(strtolower($localeCode), 0, 2);
@@ -295,20 +362,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
         return $hrefLang;
     }
 
-	public function prepareStaticNoindexNofollow() {
-		/** @var $head Mage_Page_Block_Html_Head */
-		if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
-            /*
-             *
-             * 	http://md-fashion.com.ua/ru/checkout/cart/
-            •	https://md-fashion.com.ua/ru/customer/account/login/
-            •	https://md-fashion.com.ua/ru/customer/account/create/
-            •	https://md-fashion.com.ua/ru/customer/account/forgotpassword/
-            •	http://md-fashion.com.ua/ru/contacts
-                https://md-fashion.com.ua/ru/newsletter/subscriber/new/
-
-             */
-
+	public function prepareStaticNoindexNofollow()
+    {
+        if ($head = $this->getHead()) {
 			$staticList = array(
 				'/checkout/cart',
 				'/customer/account',
@@ -319,7 +375,6 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 			$request = Mage::app()->getRequest();
 			$key = '/' . $request->getModuleName() . '/' . $request->getControllerName();
 
-			//Zend_Debug::dump($key); die(__METHOD__);
 			if (in_array($key, $staticList)) {
 				$head->setRobots('NOINDEX, NOFOLLOW');
 			}
@@ -331,7 +386,8 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	 *
 	 * @return string
 	 */
-	public function getUrlWithoutStore() {
+	public function getUrlWithoutStore()
+    {
 		$url = Mage::getSingleton('core/url')->parseUrl(urldecode(Mage::helper('core/url')->getCurrentUrl()));
 		$parts = explode('/', trim($url->getPath(), '/'));
 
@@ -342,7 +398,8 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		return '/' . implode('/', $parts);
 	}
 
-	public function getStoresParamsAs($parameter = 'id') {
+	public function getStoresParamsAs($parameter = 'id')
+    {
 		static $params = array();
 
 		if (isset($params[$parameter])) {
@@ -352,7 +409,6 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		$method = 'get' . ucfirst($parameter);
 		$stores = Mage::app()->getStores();
 		foreach ($stores as $storeId => $store) {
-
 			$params[$parameter][] = $store->{$method}();
 		}
 

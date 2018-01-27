@@ -18,11 +18,6 @@
 			<popov_seo>
 				<class>Popov_Seo_Helper</class>
 			</popov_seo>
-			<!--<mana_core>
-				<rewrite>
-					<data>Popov_Seo_Helper_Mana</data>
-				</rewrite>
-			</mana_core>-->
 			<catalog>
 				<rewrite>
 					<product_compare>Popov_Seo_Helper_Product_Compare</product_compare>
@@ -46,11 +41,6 @@
 					</seoblock>
 				</entities>
 			</popov_seo_resource>
-			<!--<core>
-				<rewrite>
-					<store>Popov_Seo_Model_Store</store>
-				</rewrite>
-			</core>-->
 		</models>
 
 		<resources>
@@ -183,12 +173,15 @@
 
 	<popov_seo>
         <handlers>
-            <product>
+            <catalog_product_view>
                 <model>Popov_Seo_Model_MetaTag_Product</model>
-            </product>
-            <category>
+            </catalog_product_view>
+            <review_product_list>
+                <model>Popov_Seo_Model_MetaTag_Product</model>
+            </review_product_list>
+            <catalog_category_view>
                 <model>Popov_Seo_Model_MetaTag_Category</model>
-            </category>
+            </catalog_category_view>
             <!--<filters>
                 <model>Popov_Seo_Model_MetaTag_Category</model>
             </filters>-->

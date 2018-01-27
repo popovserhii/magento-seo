@@ -5,7 +5,7 @@
 		<remove name="right.reports.product.compared"/>
 	</default>
 
-	<catalog_product_view>
+	<!--<catalog_product_view>
 		<reference name="content">
 			<block type="popov_seo/content"  name="content.seo.bottom" template="popov/seo/content.phtml" />
 		</reference>
@@ -24,5 +24,5 @@
 		<reference name="content">
 			<block type="popov_seo/seoBlock" after="product_list" name="popov_seo.seo_block_top" template="popov/seo/block/top.phtml"/>
 		</reference>
-	</catalog_category_layered>
+	</catalog_category_layered>-->
 </layout>

@@ -40,7 +40,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 			/** @var $layer Mage_Catalog_Model_Layer */
 			//$layer = Mage::getSingleton($layerModel);
-			foreach (explode(',', Mage::getStoreConfig('popov_section/settings/no_index')) as $noIndexProcessorName) {
+			foreach (explode(',', Mage::getStoreConfig('popov_seo/settings/no_index')) as $noIndexProcessorName) {
 				if (!$noIndexProcessorName) {
 					continue;
 				}
@@ -52,7 +52,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 				}
 			}
 
-			foreach (explode(',', Mage::getStoreConfig('popov_section/settings/follow')) as $followProcessorName) {
+			foreach (explode(',', Mage::getStoreConfig('popov_seo/settings/follow')) as $followProcessorName) {
 				if (!$followProcessorName) {
 					continue;
 				}
@@ -80,10 +80,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		if (($head = Mage::getSingleton('core/layout')->getBlock('head'))) {
 			$index = false;
 
-			//Zend_Debug::dump(Mage::getStoreConfig('popov_section/settings/index', Mage::app()->getStore())); //die(__METHOD__);
+			//Zend_Debug::dump(Mage::getStoreConfig('popov_seo/settings/index', Mage::app()->getStore())); //die(__METHOD__);
 			
 			/** @var $layer Mage_Catalog_Model_Layer */
-			foreach (explode(',', Mage::getStoreConfig('popov_section/settings/index')) as $indexProcessorName) {
+			foreach (explode(',', Mage::getStoreConfig('popov_seo/settings/index')) as $indexProcessorName) {
 				if (!$indexProcessorName) {
 					continue;
 				}
@@ -158,7 +158,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
 	protected function prepareLinkRel()
     {
-		if (Mage::getStoreConfig('popov_section/settings/rel_prev_next')) {
+		if (Mage::getStoreConfig('popov_seo/settings/rel_prev_next')) {
 			/** @var Mage_Page_Block_Html_Head $head */
 			$head = Mage::app()->getLayout()->getBlock('head');
 			if ($head) {
@@ -312,7 +312,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
         if (($params['attribute'] === 'name') && isset($this->tags['h1'])) {
             $outputHtml = $this->tags['h1'];
         } elseif ($params['attribute'] === 'description') {
-            if (Mage::getStoreConfig('popov_section/settings/description_on_first_page') && ($this->getPage() > 1)) {
+            if (Mage::getStoreConfig('popov_seo/settings/description_on_first_page') && ($this->getPage() > 1)) {
                 $outputHtml = '';
             } else {
                 $outputHtml = $this->tags['description'];
@@ -331,7 +331,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
         }
 
         $fitting = $fittingAttrs = $this->getFittingFilterAttributes();
-        if (Mage::getStoreConfig('popov_section/settings/description_on_first_page') && ($fitting['value']['page'] > 1)) {
+        if (Mage::getStoreConfig('popov_seo/settings/description_on_first_page') && ($fitting['value']['page'] > 1)) {
             $category->setDescription('');
 
             return;

@@ -337,7 +337,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
     {
         $metaTags = $this->prepareTags();
         foreach($metaTags as $tag => $value) {
-            if (Mage::getStoreConfig('popov_section/settings/allow_change_' . $tag)) {
+            if (Mage::getStoreConfig('popov_seo/settings/allow_change_' . $tag)) {
                 $method = (strpos($tag, 'meta') !== false)
                     ? 'meta'
                     : $tag;

@@ -43,7 +43,7 @@ class Popov_Seo_Model_MetaTag_Factory {
 
 	public static function canCreate($name)
     {
-        return class_exists(self::getSeoHelper()->etSeoClass($name));
+        return class_exists(self::getSeoHelper()->getSeoClass($name));
     }
 
     /**

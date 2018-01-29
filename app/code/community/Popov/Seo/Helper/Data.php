@@ -179,7 +179,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function redirectTrailingSlash()
     {
-		if (Mage::getStoreConfig('popov_seo/settings/trailing_slash')) {
+		if (Mage::getStoreConfig('popov_seo/settings/trailing_slash') && $this->isCheckedModule()) {
 			$currentUrl = Mage::helper('core/url')->getCurrentUrl();
 			if ($_SERVER['REQUEST_METHOD'] != 'POST' && !Mage::app()->getRequest()->isAjax()) {
 				$url = $currentUrl;
@@ -258,7 +258,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	public function redirectNonSecureUrl()
     {
 		if (Mage::getStoreConfig('popov_seo/settings/non_secure_url') && $this->isCheckedModule()) {
-			$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https' : 'http';
+			$protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443)
+                ? 'https'
+                : 'http';
 			if ($protocol === 'https') {
 				$url = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
                 header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
@@ -466,8 +468,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 			'/ebizautoresponder/autoresponder',
 			'/robots/index',
 			'/novaposhta/index',
-			'/novaposhta/index/street',
 			'/newsletter/subscriber',
+            //'wayforpay_payment_redirect_index'
+            '/WayForPay/redirect'
 		);
 
 		$request = Mage::app()->getRequest();

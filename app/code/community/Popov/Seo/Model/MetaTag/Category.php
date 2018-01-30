@@ -65,7 +65,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			}
 
 			if ($noIndex) {
-				$head->setRobots($follow ? 'NOINDEX, FOLLOW' : 'NOINDEX, NOFOLLOW');
+				$head->setRobots($follow ? 'NOINDEX,FOLLOW' : 'NOINDEX,NOFOLLOW');
 			}
 		}
 	}
@@ -98,7 +98,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			}
 
 			if ($index) {
-				$head->setRobots('INDEX, FOLLOW');
+				$head->setRobots('INDEX,FOLLOW');
 			}
 		}
 	}
@@ -116,7 +116,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			$direction = $request->getParam($toolbar->getDirectionVarName());
 
 			if ($order || $direction || $limit) {
-				$head->setRobots('NOINDEX, NOFOLLOW');
+				$head->setRobots('NOINDEX,NOFOLLOW');
 			}
 		}
 	}

@@ -378,7 +378,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 			$key = '/' . $request->getModuleName() . '/' . $request->getControllerName();
 
 			if (in_array($key, $staticList)) {
-				$head->setRobots('NOINDEX, NOFOLLOW');
+				$head->setRobots('NOINDEX,NOFOLLOW');
 			}
 		}
 	}

@@ -24,7 +24,10 @@ class Popov_Seo_Model_MetaTag_Factory {
         $className = self::getSeoHelper()->getSeoClass($name);
 
         if (!class_exists($className)) {
-            Mage::throwException(sprintf('Cannot found class %s', $className));
+            Mage::throwException(sprintf(
+                'Name "%s" doesn\'t have handler in "config/popov_seo/handlers" or class not found',
+                $name
+            ));
         }
 
         $type = self::getSeoHelper()->getSeoType($name);

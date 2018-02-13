@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Popov_Seo>
-			<version>0.1.8</version>
+			<version>0.1.9</version>
 		</Popov_Seo>
 	</modules>
 
@@ -36,9 +36,6 @@
 					<rule>
 						<table>popov_seo_rule</table>
 					</rule>
-					<seoblock>
-						<table>popov_seo_block</table>
-					</seoblock>
 				</entities>
 			</popov_seo_resource>
 		</models>
@@ -110,6 +107,15 @@
 					</popov_seo_cms_observer>
 				</observers>
 			</controller_action_layout_render_before_cms_index_index>
+            <catalog_helper_output_construct>
+                <observers>
+                    <m_seo_observer_attributes>
+                        <type>singleton</type>
+                        <class>popov_seo/observer</class>
+                        <method>hookCustomAttributeOutputHandler</method>
+                    </m_seo_observer_attributes>
+                </observers>
+            </catalog_helper_output_construct>
 		</events>
 
 	</global>
@@ -173,18 +179,19 @@
 
 	<popov_seo>
         <handlers>
-            <catalog_product_view>
+            <aliases>
+                <catalog_product_view handler="product" />
+                <review_product_list handler="product" />
+                <quickview_index_view handler="product" />
+                <catalog_category_view handler="category" />
+            </aliases>
+
+            <product>
                 <model>Popov_Seo_Model_MetaTag_Product</model>
-            </catalog_product_view>
-            <review_product_list>
-                <model>Popov_Seo_Model_MetaTag_Product</model>
-            </review_product_list>
-            <quickview_index_view>
-                <model>Popov_Seo_Model_MetaTag_Product</model>
-            </quickview_index_view>
-            <catalog_category_view>
+            </product>
+            <category>
                 <model>Popov_Seo_Model_MetaTag_Category</model>
-            </catalog_category_view>
+            </category>
             <!--<filters>
                 <model>Popov_Seo_Model_MetaTag_Category</model>
             </filters>-->

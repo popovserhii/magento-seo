@@ -8,14 +8,15 @@
  * @datetime: 20.04.14 15:02
  */
 
-class Popov_Seo_Model_Observer extends Varien_Event_Observer {
-
+class Popov_Seo_Model_Observer extends Varien_Event_Observer
+{
 	/**
 	 * @var Popov_Seo_Helper_Data $seoHelper
 	 */
 	protected $seoHelper;
 
-	public function controllerActionPredispatch() {
+	public function controllerActionPredispatch()
+    {
 		if (!Mage::app()->getStore()->isAdmin()) {
 			$this->getSeoHelper()->redirect301();
 			$this->getSeoHelper()->redirectIndexPhp();
@@ -28,7 +29,8 @@ class Popov_Seo_Model_Observer extends Varien_Event_Observer {
 		}
 	}
 
-	public function hookToChangeMetaTags(Varien_Event_Observer $observer) {
+	public function hookToChangeMetaTags(Varien_Event_Observer $observer)
+    {
         //$seoName = $this->getSeoHelper()->getSeoName();
 	    //if (Popov_Seo_Model_MetaTag_Factory::canCreate($seoName)) {
         //    Popov_Seo_Model_MetaTag_Factory::create($seoName)->run();
@@ -44,14 +46,24 @@ class Popov_Seo_Model_Observer extends Varien_Event_Observer {
 		}
 	}
 
-	public function hookTo8080Port() {
+    public function hookCustomAttributeOutputHandler(Varien_Event_Observer $observer)
+    {
+        // @todo attach category helper attribute handler
+        #$outputHelper = $observer->getEvent()->getHelper();
+        #$outputHelper->addHandler('productAttribute', $this);
+        #$outputHelper->addHandler('categoryAttribute', $this);
+    }
+
+	public function hookTo8080Port()
+    {
 		$this->getSeoHelper()->addSiteVerification();
 	}
 
     /**
      * @return Popov_Seo_Helper_Data
      */
-	public function getSeoHelper() {
+	public function getSeoHelper()
+    {
 		if (!$this->seoHelper) {
 			$this->seoHelper = Mage::helper('popov_seo');
 		}

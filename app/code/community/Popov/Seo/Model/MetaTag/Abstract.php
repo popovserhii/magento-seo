@@ -241,18 +241,28 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		if (is_null($this->fittingRules)) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['id'];
 
+			//$fittingObject = new Varien_Object($fittingAttrs);
+            $fittingObject = Mage::getModel('catalog/product');
+            $fittingObject->setData($fittingAttrs);
+
 			$best = array();
-			$default = false;
+			$default = array();
 			$rules = $this->getRules();
 			$numFittingAttrs = count($fittingAttrs);
 
 			foreach ($rules as $key => $rule) {
-				if (!($attrs = $rule->getSeoOptionFilters())) {
+				/*if (!($attrs = $rule->getSeoOptionFilters())) {
 					$attrs = $rule->getSeoAttributes();
 					$default[$rule->getContext()] = $rule;
-				}
+				}*/
 
-				$parts = explode(';', $attrs);
+
+				/** @var Mage_CatalogRule_Model_Rule_Condition_Combine */
+				if ($rule->validate($fittingObject)) {
+                    $this->fittingRules[$rule->getContext()] = $rule;
+                }
+
+				/*$parts = explode(';', $attrs);
 
 				// support single value per filter if you need more in one filter then you have to explode and sort $id
 				// and sort Popov_Seo_Model_MetaTag_Category::getFittingFilterAttributes() ~207 line
@@ -277,12 +287,12 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
                 ) {
 					$this->fittingRules[$rule->getContext()] = $rule;
 					//break;
-				}
+				}*/
 			}
 
-			if (!$this->fittingRules && $default) {
+			/*if (!$this->fittingRules && $default) {
 				$this->fittingRules = $default;
-			}
+			}*/
 
 			//ksort($best);
 			//Zend_Debug::dump($best);

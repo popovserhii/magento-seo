@@ -48,11 +48,14 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
         return $seoType;
     }
 
-
     public function getSeoClass($seoName = null)
     {
         $seoName = $seoName ?: $this->getSeoName();
-        return (string) Mage::getConfig()->getNode('popov_seo/handlers/' . $seoName)->model;
+        $element = Mage::getConfig()->getNode('popov_seo/handlers/aliases/' . $seoName);
+        $handler = $element ? $element->getAttribute('handler') : $seoName;
+        $handlerClass = (string) Mage::getConfig()->getNode('popov_seo/handlers/' . $handler)->model;
+
+        return $handlerClass;
     }
 
     public function getSeoAdapter()

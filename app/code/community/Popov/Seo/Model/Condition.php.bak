@@ -1,36 +1,36 @@
 <?php
-
 /**
- * SEO Rule
+ * The MIT License (MIT)
+ * Copyright (c) 2018 Serhii Popov
+ * This source file is subject to The MIT License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/MIT
  *
  * @category Popov
  * @package Popov_Seo
  * @author Serhii Popov <popow.serhii@gmail.com>
- * @datetime: 21.04.14 15:13
+ * @license https://opensource.org/licenses/MIT The MIT License (MIT)
  */
-//class Popov_Seo_Model_Rule extends Mage_Core_Model_Abstract
-class Popov_Seo_Model_Rule extends Mage_CatalogRule_Model_Rule
-//class Popov_Seo_Model_Rule extends Mage_Rule_Model_Rule
+
+class Popov_Seo_Model_Condition extends Mage_Rule_Model_Rule
 {
-    protected function _construct()
+    public function _construct()
     {
-        $this->_init('popov_seo/rule');
+        parent::_construct();
+        $this->_init('popov_seo/condition');
+        //$this->setIdFieldName('lesson28_id');
     }
 
     public function getConditionsInstance()
     {
-        return Mage::getModel('catalogrule/rule_condition_combine');
+        return Mage::getModel('salesrule/rule_condition_combine');
     }
 
-    /*public function getConditionsInstance()
-    {
-        return Mage::getModel('salesrule/rule_condition_combine');
-    }*/
-
-    /*public function getActionsInstance()
+    public function getActionsInstance()
     {
         return Mage::getModel('salesrule/rule_condition_product_combine');
-    }*/
+    }
 
     /**
      * load Rule posted from web
@@ -38,7 +38,7 @@ class Popov_Seo_Model_Rule extends Mage_CatalogRule_Model_Rule
      * @param array $rule
      * @return Magestore_RewardPointsRule_Model_Earning_Sales
      */
-    /*public function loadPost(array $rule)
+    public function loadPost(array $rule)
     {
         $arr = $this->_convertFlatToRecursive($rule);
         if (isset($arr['conditions'])) {
@@ -49,7 +49,7 @@ class Popov_Seo_Model_Rule extends Mage_CatalogRule_Model_Rule
         }
 
         return $this;
-    }*/
+    }
 
     /*protected function _beforeSave()
     {

@@ -107,7 +107,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Tab_Form extends Mage_Adminhtml_Block_
 			'required'  => false,
             'style'     => 'width:20%',
             'after_element_html' => '<small>Higher priority means the rule is checked last. Preference is by latest rule. 
-                By default, the first attached route is read.</small>',
+                By default, the first attached rule is read.</small>',
 		));
 
 		$fieldset->addField('created_at', 'date', array(

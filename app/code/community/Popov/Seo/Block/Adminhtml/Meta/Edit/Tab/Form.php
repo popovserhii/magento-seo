@@ -59,6 +59,14 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Tab_Form extends Mage_Adminhtml_Block_
 			),
 		));
 
+        $fieldset->addField('name', 'text', array(
+            'label'              => $this->__('Name'),
+            'name'               => 'name',
+            'required'           => true,
+            'style'              => 'width:100%',
+            //'after_element_html' => '<small>Example: category;manufacturer</small>',
+        ));
+
 		$fieldset->addField('context', 'select', array(
 			'label'     => $this->__('Context'),
 			'name'      => 'context',
@@ -83,14 +91,6 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Tab_Form extends Mage_Adminhtml_Block_
 			'after_element_html' => '<small>Example: category;manufacturer</small>',
 		));
 
-		$fieldset->addField('seo_option_filters', 'text', array(
-			'label'              => $this->__('Attribute options'),
-			'name'               => 'seo_option_filters',
-			'required'           => false,
-			'style'              => 'width:100%',
-			'after_element_html' => '<small>Example: category;manufacturer:2</small>',
-		));
-
 		$fieldset->addField('is_active', 'select', array(
 			'label'     => $this->__('Status'),
 			'name'      => 'is_active',
@@ -99,6 +99,15 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Tab_Form extends Mage_Adminhtml_Block_
 				1 => $this->__('Enabled'),
 				0 => $this->__('Disabled'),
 			),
+		));
+
+		$fieldset->addField('priority', 'text', array(
+			'label'     => $this->__('Priority'),
+			'name'      => 'priority',
+			'required'  => false,
+            'style'     => 'width:20%',
+            'after_element_html' => '<small>Higher priority means the rule is checked last. Preference is by latest rule. 
+                By default, the first attached route is read.</small>',
 		));
 
 		$fieldset->addField('created_at', 'date', array(

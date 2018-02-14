@@ -38,7 +38,7 @@ class Popov_Seo_Model_MetaTag_Factory {
 				array('finset' => 0), // all stores
 				array('finset' => Mage::app()->getStore(true)->getId())
 			))
-			//->setOrder('created', 'DESC')
+			->setOrder('priority', 'ASC')
 		;
 
 		return new $className($rules);

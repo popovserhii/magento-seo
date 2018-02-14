@@ -12,7 +12,7 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Tab_Conditions extends Mage_Adminhtml_
 		$model = Mage::registry('current_popov_meta');
 
         $form = new Varien_Data_Form();
-        $form->setHtmlIdPrefix('condition_');
+        $form->setHtmlIdPrefix('rule_'); // is important, must be as begin of 'rule_conditions_fieldset'
         $this->setForm($form);
         $model->getConditions()->setJsFormObject('rule_conditions_fieldset');
 

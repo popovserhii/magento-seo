@@ -207,7 +207,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		if (is_null($fitting)) {
 		    if ($category = Mage::registry('current_category')) {
                 $seoAttr = $this->registerSeoFilter('category');
-                $fitting['id'][$seoAttr] = $category->getid();
+                $fitting['id'][$seoAttr] = $category->getId();
+                $fitting['value'][$seoAttr] = trim($category->getName());
+                $seoAttr = $this->registerSeoFilter('category_ids');
+                $fitting['id'][$seoAttr] = $category->getId();
                 $fitting['value'][$seoAttr] = trim($category->getName());
             }
             if (($currentPage = $this->getToolbar()->getCurrentPage()) > 1) {

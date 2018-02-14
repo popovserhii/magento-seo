@@ -17,11 +17,21 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit extends Mage_Adminhtml_Block_Widget_Fo
         $this->_controller = 'adminhtml_meta';
         $this->setData('action', $this->getUrl('*/*/save'));
 
+        $this->_addButton('saveandcontinue', array(
+            'label'     => $this->__('Save And Continue Edit'),
+            'onclick'   => 'saveAndContinueEdit()',
+            'class'     => 'save',
+        ), -100);
+
         $this->_addButton('copy', array(
             'label' => Mage::helper('catalog')->__('Copy'),
             'onclick' => "setLocation('{$this->getCopyUrl()}')",
             'class' => 'copy',
         ), 1);
+
+        $this->_formScripts[] = "function saveAndContinueEdit(){
+            editForm.submit($('edit_form').action+'back/edit/');
+        }";
     }
 
     protected function getCopyUrl()

@@ -49,23 +49,23 @@ class Popov_Seo_Block_Adminhtml_Meta_Grid extends Mage_Adminhtml_Block_Widget_Gr
 			'width'  => '10px',
 		));
 
-		$this->addColumn('Attributes', array(
-			'header' => $this->__('Attributes'),
-			'index'  => 'seo_attributes'
+        $this->addColumn('type', array(
+            'header' => $this->__('Type'),
+            'index'  => 'type'
+        ));
+
+		$this->addColumn('name', array(
+			'header' => $this->__('Name'),
+			'index'  => 'name'
 		));
 
-		$this->addColumn('seo_option_filters', array(
-			'header' => $this->__('Attribute options'),
-			'index'  => 'seo_option_filters'
-		));
-
-		$this->addColumn('type', array(
-			'header' => $this->__('Rule type'),
-			'index'  => 'type'
-		));
+        $this->addColumn('Attributes', array(
+            'header' => $this->__('Attributes'),
+            'index'  => 'seo_attributes'
+        ));
 
 		$this->addColumn('context', array(
-			'header' => $this->__('Rule context'),
+			'header' => $this->__('Context'),
 			'index'  => 'context'
 		));
 

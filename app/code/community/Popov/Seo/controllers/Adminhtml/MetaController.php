@@ -88,7 +88,13 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 
 				Mage::getSingleton('adminhtml/session')->addSuccess($this->__('SEO Rule was saved successfully'));
 				Mage::getSingleton('adminhtml/session')->setMetaData(false);
-				$this->_redirect('*/*/');
+
+				if ($this->getRequest()->getParam('back', false)) {
+                    $this->_redirect('*/*/edit', array('id' => $model->getId(), '_current' => true));
+                    return;
+                }
+
+                $this->_redirect('*/*/');
 			} catch (Mage_Core_Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			} catch (Exception $e) {

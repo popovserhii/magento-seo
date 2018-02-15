@@ -209,9 +209,6 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
                 $seoAttr = $this->registerSeoFilter('category');
                 $fitting['id'][$seoAttr] = $category->getId();
                 $fitting['value'][$seoAttr] = trim($category->getName());
-                $seoAttr = $this->registerSeoFilter('category_ids');
-                $fitting['id'][$seoAttr] = $category->getId();
-                $fitting['value'][$seoAttr] = trim($category->getName());
             }
             if (($currentPage = $this->getToolbar()->getCurrentPage()) > 1) {
                 $seoAttr = $this->registerSeoFilter('page');
@@ -248,7 +245,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	protected function getAdditionalValues()
     {
 		$values = parent::getAdditionalValues();
-		$values['categories'] = implode(' ', $this->getCategoryPathNames());
+        if ($category = Mage::registry('current_category')) {
+            $values['category_ids'] = $category->getId();
+            $values['categories'] = implode(' ', $this->getCategoryPathNames());
+        }
 
 		return $values;
 	}

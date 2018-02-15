@@ -243,7 +243,7 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 
 			//$fittingObject = new Varien_Object($fittingAttrs);
             $fittingObject = Mage::getModel('catalog/product');
-            $fittingObject->setData($fittingAttrs);
+            $fittingObject->setData(array_merge($this->getAdditionalValues(), $fittingAttrs));
 
 			$best = array();
 			$default = array();

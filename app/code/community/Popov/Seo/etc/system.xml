@@ -197,17 +197,6 @@
                             <show_in_store>1</show_in_store>
                         </rel_alternate_hreflang_country>
 
-						<pager translate="label comment">
-							<label>Add page number to meta tags</label>
-							<comment>Show page number in title, keywords and description</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>40</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</pager>
-
 						<allow_change_meta_title translate="label comment">
 							<label>Allow change Meta Title</label>
 							<!--<comment>Show page number in title, keywords and description</comment>-->
@@ -246,7 +235,7 @@
 							<comment>H1 rules will be applied if this option is selected</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>40</sort_order>
+							<sort_order>50</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -257,18 +246,40 @@
 							<comment>Description rules will be applied if this option is selected</comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>40</sort_order>
+							<sort_order>50</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</allow_change_description>
+
+                        <description_on_first_page translate="label comment">
+                            <label>Show description only on first page</label>
+                            <!--<comment>Magento convert uppercase URL to lowercase via 301 redirect</comment>-->
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </description_on_first_page>
+
+                        <pager translate="label comment">
+                            <label>Add page number to meta tags</label>
+                            <comment>Show page number in title, keywords and description</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </pager>
 
 						<no_index translate="label comment">
 							<label>Search Engines Do Not Index Any of These Pages</label>
 							<comment>NOINDEX, NOFOLLOW in robots meta tag</comment>
 							<frontend_type>multiselect</frontend_type>
 							<source_model>popov_seo/filterLinks_source_noindex</source_model>
-							<sort_order>40</sort_order>
+							<sort_order>140</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
@@ -296,16 +307,6 @@
 							<show_in_store>1</show_in_store>
 						</follow>
 
-                        <description_on_first_page translate="label comment">
-                            <label>Show description only on first page</label>
-                            <!--<comment>Magento convert uppercase URL to lowercase via 301 redirect</comment>-->
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>170</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </description_on_first_page>
 					</fields>
 				</settings>
 			</groups>

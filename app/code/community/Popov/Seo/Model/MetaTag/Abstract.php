@@ -241,54 +241,60 @@ abstract class Popov_Seo_Model_MetaTag_Abstract implements Popov_Seo_Model_MetaT
 		if (is_null($this->fittingRules)) {
 			$fittingAttrs = $this->getFittingFilterAttributes()['id'];
 
+			//$fittingObject = new Varien_Object($fittingAttrs);
+            $fittingObject = Mage::getModel('catalog/product');
+            $fittingObject->setData(array_merge($this->getAdditionalValues(), $fittingAttrs));
+
 			$best = array();
-			$default = false;
+			$default = array();
 			$rules = $this->getRules();
 			$numFittingAttrs = count($fittingAttrs);
 
 			foreach ($rules as $key => $rule) {
-				if (!($attrs = $rule->getSeoOptionFilters())) {
-					$attrs = $rule->getSeoAttributes();
-					$default[$rule->getContext()] = $rule;
-				}
+				/** @var Mage_CatalogRule_Model_Rule_Condition_Combine */
+				if ($rule->getConditions() && $rule->validate($fittingObject)) {
+                    $this->fittingRules[$rule->getContext()] = $rule;
+                } elseif (!$rule->getConditions()) {
+                    /*if (!($attrs = $rule->getSeoOptionFilters())) {
+                        $attrs = $rule->getSeoAttributes();
+                        $default[$rule->getContext()] = $rule;
+                    }*/
 
-				$parts = explode(';', $attrs);
+                    $attrs = $rule->getSeoAttributes();
+                    $default[$rule->getContext()] = $rule;
 
-				// support single value per filter if you need more in one filter then you have to explode and sort $id
-				// and sort Popov_Seo_Model_MetaTag_Category::getFittingFilterAttributes() ~207 line
-				$best[$key] = 0;
-				foreach ($parts as $condition) {
-					$condParts = explode(':', $condition);
-					$attr = $condParts[0];
-					$id = isset($condParts[1]) ? $this->handleSeoAttributes($condParts[1]) : null;
-					$fittingId = $this->handleSeoAttributes($fittingAttrs[$attr]);
+                    $parts = explode(';', $attrs);
 
-					if ($id && $fittingId === $id) {
-						$best[$key]++;
-					} elseif (!$id) {
-						$best[$key]++;
-					}
-				}
+                    // support single value per filter if you need more in one filter then you have to explode and sort $id
+                    // and sort Popov_Seo_Model_MetaTag_Category::getFittingFilterAttributes() ~207 line
+                    $best[$key] = 0;
+                    foreach ($parts as $condition) {
+                        $condParts = explode(':', $condition); // this is not used now leave only for future improvement
+                        $attr = $condParts[0];
+                        $id = isset($condParts[1]) ? $this->handleSeoAttributes($condParts[1]) : null;
+                        $fittingId = $this->handleSeoAttributes($fittingAttrs[$attr]);
 
-				// If set of rules is only with seo_option_filters without default rule
-                // then we shouldn't check it, otherwise we check if default and current rule is not equal
-				if ((!isset($default[$rule->getContext()]) || ($default[$rule->getContext()]->getId() != $rule->getId()))
-                    && $numFittingAttrs === $best[$key]
-                ) {
-					$this->fittingRules[$rule->getContext()] = $rule;
-					//break;
-				}
+                        if ($id && $fittingId === $id) {
+                            $best[$key]++;
+                        } elseif (!$id) {
+                            $best[$key]++;
+                        }
+                    }
+
+                    // If set of rules is only with seo_option_filters without default rule
+                    // then we shouldn't check it, otherwise we check if default and current rule is not equal
+                    if ((!isset($default[$rule->getContext()]) || ($default[$rule->getContext()]->getId() != $rule->getId()))
+                        && $numFittingAttrs === $best[$key]
+                    ) {
+                        $this->fittingRules[$rule->getContext()] = $rule;
+                        //break;
+                    }
+                }
 			}
 
 			if (!$this->fittingRules && $default) {
 				$this->fittingRules = $default;
 			}
-
-			//ksort($best);
-			//Zend_Debug::dump($best);
-			//Zend_Debug::dump(get_class($this->fittingRule)); die(__METHOD__.__LINE__);
-
-			//$this->fittingRule = $rules->getItems()[end($best)];
 		}
 
 		return $this->fittingRules;

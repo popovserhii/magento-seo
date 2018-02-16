@@ -65,7 +65,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			}
 
 			if ($noIndex) {
-				$head->setRobots($follow ? 'NOINDEX, FOLLOW' : 'NOINDEX, NOFOLLOW');
+				$head->setRobots($follow ? 'NOINDEX,FOLLOW' : 'NOINDEX,NOFOLLOW');
 			}
 		}
 	}
@@ -98,7 +98,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			}
 
 			if ($index) {
-				$head->setRobots('INDEX, FOLLOW');
+				$head->setRobots('INDEX,FOLLOW');
 			}
 		}
 	}
@@ -116,7 +116,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 			$direction = $request->getParam($toolbar->getDirectionVarName());
 
 			if ($order || $direction || $limit) {
-				$head->setRobots('NOINDEX, NOFOLLOW');
+				$head->setRobots('NOINDEX,NOFOLLOW');
 			}
 		}
 	}
@@ -207,7 +207,7 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 		if (is_null($fitting)) {
 		    if ($category = Mage::registry('current_category')) {
                 $seoAttr = $this->registerSeoFilter('category');
-                $fitting['id'][$seoAttr] = $category->getid();
+                $fitting['id'][$seoAttr] = $category->getId();
                 $fitting['value'][$seoAttr] = trim($category->getName());
             }
             if (($currentPage = $this->getToolbar()->getCurrentPage()) > 1) {
@@ -245,7 +245,10 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 	protected function getAdditionalValues()
     {
 		$values = parent::getAdditionalValues();
-		$values['categories'] = implode(' ', $this->getCategoryPathNames());
+        if ($category = Mage::registry('current_category')) {
+            $values['category_ids'] = $category->getId();
+            $values['categories'] = implode(' ', $this->getCategoryPathNames());
+        }
 
 		return $values;
 	}

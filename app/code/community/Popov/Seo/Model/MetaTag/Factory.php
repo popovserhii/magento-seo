@@ -24,7 +24,10 @@ class Popov_Seo_Model_MetaTag_Factory {
         $className = self::getSeoHelper()->getSeoClass($name);
 
         if (!class_exists($className)) {
-            Mage::throwException(sprintf('Cannot found class %s', $className));
+            Mage::throwException(sprintf(
+                'Name "%s" doesn\'t have handler in "config/popov_seo/handlers" or class not found',
+                $name
+            ));
         }
 
         $type = self::getSeoHelper()->getSeoType($name);
@@ -35,7 +38,7 @@ class Popov_Seo_Model_MetaTag_Factory {
 				array('finset' => 0), // all stores
 				array('finset' => Mage::app()->getStore(true)->getId())
 			))
-			//->setOrder('created', 'DESC')
+			->setOrder('priority', 'ASC')
 		;
 
 		return new $className($rules);

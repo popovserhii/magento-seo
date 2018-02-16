@@ -27,9 +27,13 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 		$id = (int) $this->getRequest()->getParam('id');
 		$model = Mage::getModel('popov_seo/rule')->load($id);
 
-		//$this->loadLayout()->_setActiveMenu('popov_seo');
+        // enable conditions
+        //$model->getActions()->setJsFormObject('rule_actions_fieldset');
 
-		$data = Mage::getSingleton('adminhtml/session')->getMetaData(true);
+        //$this->loadLayout()->_setActiveMenu('popov_seo');
+
+
+        $data = Mage::getSingleton('adminhtml/session')->getMetaData(true);
 		if (!empty($data)) {
 			$model->setData($data);
 		}
@@ -65,13 +69,32 @@ class Popov_Seo_Adminhtml_MetaController extends Mage_Adminhtml_Controller_Actio
 					$data['created_at'] = Mage::getModel('core/date')->date('Y-m-d H:i:s');
 				}
 
+                if (isset($data['rule']['conditions'])) {
+                    $data['conditions'] = $data['rule']['conditions'];
+                }
+                //if (isset($data['rule']['actions'])) {
+                //    $data['actions'] = $data['rule']['actions'];
+                //}
+                unset($data['rule']);
+                //$model->loadPost($data);
+
+                /** @var Popov_Seo_Model_Rule $model */
 				$model = Mage::getModel('popov_seo/rule');
-				$model->setData($data)->setId($this->getRequest()->getParam('id'));
+				$model->setData($data)
+                //->setId($this->getRequest()->getParam('id'));
+                /*$model*/->loadPost($data)
+                    ->setId($this->getRequest()->getParam('id'));
 				$model->save();
 
 				Mage::getSingleton('adminhtml/session')->addSuccess($this->__('SEO Rule was saved successfully'));
 				Mage::getSingleton('adminhtml/session')->setMetaData(false);
-				$this->_redirect('*/*/');
+
+				if ($this->getRequest()->getParam('back', false)) {
+                    $this->_redirect('*/*/edit', array('id' => $model->getId(), '_current' => true));
+                    return;
+                }
+
+                $this->_redirect('*/*/');
 			} catch (Mage_Core_Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			} catch (Exception $e) {

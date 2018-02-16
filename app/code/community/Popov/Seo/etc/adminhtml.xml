@@ -11,11 +11,11 @@
 					<action>adminhtml/meta/index</action>
 					<sort_order>10</sort_order>
 				</popov_seo_meta>
-				<popov_seo_block translate="title" module="popov_seo">
+				<!--<popov_seo_block translate="title" module="popov_seo">
 					<title>Seo Block</title>
 					<action>adminhtml/seoBlock/index</action>
 					<sort_order>20</sort_order>
-				</popov_seo_block>
+				</popov_seo_block>-->
 			</children>
 
 		</popov_seo>

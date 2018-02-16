@@ -470,7 +470,8 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 			'/novaposhta/index',
 			'/newsletter/subscriber',
             //'wayforpay_payment_redirect_index'
-            '/WayForPay/redirect'
+            '/WayForPay/redirect',
+            '/WayForPay/response',
 		);
 
 		$request = Mage::app()->getRequest();

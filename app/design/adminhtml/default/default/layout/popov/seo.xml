@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <layout>
-	<!-- Here, we reference the XML node path of our route -->
-	<adminhtml_meta_index>
-		<reference name="content">
-			<!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
-			<block type="popov_seo/adminhtml_meta" name="seo.meta.tags" />
-		</reference>
-	</adminhtml_meta_index>
+    <!-- Here, we reference the XML node path of our route -->
+    <adminhtml_meta_index>
+        <reference name="content">
+            <!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
+            <block type="popov_seo/adminhtml_meta" name="seo.meta.tags"/>
+        </reference>
+    </adminhtml_meta_index>
 
-	<adminhtml_meta_edit>
+    <adminhtml_meta_edit>
         <reference name="head">
             <action method="setCanLoadExtJs"><flag>1</flag></action>
             <action method="setCanLoadRulesJs"><flag>1</flag></action>
         </reference>
-		<reference name="content">
-			<!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
-			<block type="popov_seo/adminhtml_meta_edit" name="seo.meta.tags.edit" />
-		</reference>
+        <reference name="content">
+            <!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
+            <block type="popov_seo/adminhtml_meta_edit" name="seo.meta.tags.edit"/>
+        </reference>
         <reference name="left">
             <!-- We also reference our block by namespacename_modulename/adminhtml_controllername, and name it uniquely -->
-            <block type="popov_seo/adminhtml_meta_edit_tabs" name="seo.meta.tags.edit.tabs" />
+            <block type="popov_seo/adminhtml_meta_edit_tabs" name="seo.meta.tags.edit.tabs"/>
         </reference>
-	</adminhtml_meta_edit>
+    </adminhtml_meta_edit>
 </layout>

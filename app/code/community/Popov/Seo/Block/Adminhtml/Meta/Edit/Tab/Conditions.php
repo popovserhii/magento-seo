@@ -40,5 +40,4 @@ class Popov_Seo_Block_Adminhtml_Meta_Edit_Tab_Conditions extends Mage_Adminhtml_
 
         return parent::_prepareForm();
 	}
-
 }

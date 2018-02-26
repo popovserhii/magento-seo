@@ -312,9 +312,19 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
 
     public function categoryAttribute(Mage_Catalog_Helper_Output $outputHelper, $outputHtml, $params)
     {
-        if (($params['attribute'] === 'name') && isset($this->tags['h1'])) {
+        $tagMaps = [
+            'name' => 'h1',
+            'description' => 'description',
+        ];
+
+        $tagName = $tagMaps[$params['attribute']];
+        if (!isset($this->tags[$tagName]) || !$this->tags[$tagName]) {
+            return $outputHtml;
+        }
+
+        if ($tagName === 'h1') {
             $outputHtml = $this->tags['h1'];
-        } elseif ($params['attribute'] === 'description') {
+        } elseif ($tagName === 'description') {
             if (Mage::getStoreConfig('popov_seo/settings/description_on_first_page') && ($this->getPage() > 1)) {
                 $outputHtml = '';
             } else {

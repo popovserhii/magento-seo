@@ -338,16 +338,28 @@ class Popov_Seo_Model_MetaTag_Category extends Popov_Seo_Model_MetaTag_Abstract 
     protected function unsetDescription()
     {
         $category = Mage::getModel('catalog/layer')->getCurrentCategory();
-
         if (!$category) {
             return;
         }
 
-        $fitting = $fittingAttrs = $this->getFittingFilterAttributes();
-        if (Mage::getStoreConfig('popov_seo/settings/description_on_first_page') && ($fitting['value']['page'] > 1)) {
+        if ($this->allowUnsetDescription()) {
             $category->setDescription('');
 
             return;
         }
+    }
+
+    /**
+     * There is check in category/view.phtml if description is false then OutputHelper isn't calling.
+     *
+     * This behavior unset default category description if below condition is true
+     * and there is no rule found
+     */
+    protected function allowUnsetDescription()
+    {
+        $filters = Mage::getSingleton('catalog/layer')->getState()->getFilters();
+
+        return Mage::getStoreConfig('popov_seo/settings/description_on_first_page')
+            && (($this->getPage() > 1) || (count($filters)) && !isset($this->tags['description']));
     }
 }

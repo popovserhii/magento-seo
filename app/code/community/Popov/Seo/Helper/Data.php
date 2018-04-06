@@ -165,7 +165,9 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 	public function redirectIndexPhp()
     {
 		if (Mage::getStoreConfig('popov_seo/settings/index_php')
-            && Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES)) {
+            && Mage::getStoreConfig(Mage_Core_Model_Store::XML_PATH_USE_REWRITES)
+            && !Mage::app()->getRequest()->isAjax()
+        ) {
             $currentUrl = Mage::helper('core/url')->getCurrentUrl();
             if (strpos($currentUrl, 'index.php/') !== false) {
                 $pos = strpos($currentUrl, 'index.php/');

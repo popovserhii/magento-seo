@@ -10,6 +10,11 @@
 class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 {
     /**
+     * @var Popov_Seo_Helper_Filter
+     */
+    protected $filterHelper;
+
+    /**
      * @var Mage_Page_Block_Html_Head
      */
     protected $head;
@@ -190,8 +195,10 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 				$url = $currentUrl;
 
 				if ((substr($url, -1) == '/') && ($_SERVER['REQUEST_URI'] !== '/')) {
+                    $filter = $this->getFilterHelper();
+
 					header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
-					header('Location: ' . rtrim($url, '/'));
+					header('Location: ' . $filter->trailingSlash($url));
 					die();
 				}
 			}
@@ -388,6 +395,32 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 	}
 
+    public function prepareLinks($response)
+    {
+        if (Mage::app()->getRequest()->isAjax()) {
+            return;
+        }
+
+        $filter = $this->getFilterHelper();
+
+        if (Mage::getStoreConfig('popov_seo/settings/trailing_slash')) {
+            $regexp = "/<a(.*?)href=\"(.*?)\"(.*?)>/";
+            $html = preg_replace_callback($regexp, function ($matches) use ($filter) {
+                list($full, $attrsBefore, $href, $attrsAfter) = $matches;
+                // There is no needs add all filters for lower case URLs, multiple slashes and etc.
+                // You can but more exceptable way will be fix it in root of problem,
+                // such as change URL with upper case simbols through admin panel
+                $href = $filter->trailingSlash($href);
+                $href = sprintf('<a%shref="%s"%s>', $attrsBefore, $href, $attrsAfter);
+
+                return $href;
+            }, $response->getBody());
+
+            $response->setBody($html);
+        }
+
+    }
+
 	/**
 	 * Get url without store
 	 *
@@ -521,4 +554,16 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 		
 		return (trim($baseUrl, '/') === trim($currentUrl, '/')) ? true : false;
 	}
+
+    /**
+     * @return Popov_Seo_Helper_Filter
+     */
+	protected function getFilterHelper()
+    {
+        if (!$this->filterHelper) {
+            $this->filterHelper = $filter = Mage::helper('popov_seo/filter');
+        }
+
+        return $this->filterHelper;
+    }
 }

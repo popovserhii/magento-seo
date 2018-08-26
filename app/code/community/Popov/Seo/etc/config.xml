@@ -50,74 +50,6 @@
 				</connection>
 			</popov_seo_setup>
 		</resources>
-
-		<events>
-            <!-- this name is really important, use this to indicate the layout-render-before event -->
-			<!--<controller_action_layout_render_before_catalog_category_view>
-				<observers>
-					<popov_seo_meta_tags_observer>
-						<type>singleton</type>
-						<class>Popov_Seo_Model_Observer</class>
-						<method>hookToChangeMetaTags</method>
-					</popov_seo_meta_tags_observer>
-				</observers>
-			</controller_action_layout_render_before_catalog_category_view>-->
-			<!--<controller_action_layout_render_before>
-				<observers>
-					<popov_seo_meta_tags_observer>
-						<type>singleton</type>
-						<class>Popov_Seo_Model_Observer</class>
-						<method>hookToChangeMetaTags</method>
-					</popov_seo_meta_tags_observer>
-				</observers>
-			</controller_action_layout_render_before>
-			<controller_action_layout_render_before_catalog_product_view>
-				<observers>
-					<popov_seo_meta_tags_observer>
-						<type>singleton</type>
-						<class>Popov_Seo_Model_Observer</class>
-						<method>hookToChangeMetaTags</method>
-					</popov_seo_meta_tags_observer>
-				</observers>
-			</controller_action_layout_render_before_catalog_product_view>-->
-			<controller_action_predispatch>
-				<observers>
-					<popov_seo_predispatch_observer>
-						<type>singleton</type>
-						<class>Popov_Seo_Model_Observer</class>
-						<method>controllerActionPredispatch</method>
-					</popov_seo_predispatch_observer>
-				</observers>
-			</controller_action_predispatch>
-			<controller_action_layout_generate_blocks_after>
-				<observers>
-					<popov_seo_postdispatch_observer>
-						<type>singleton</type>
-						<class>Popov_Seo_Model_Observer</class>
-						<method>hookAfterGenerateBlocks</method>
-					</popov_seo_postdispatch_observer>
-				</observers>
-			</controller_action_layout_generate_blocks_after>
-			<controller_action_layout_render_before_cms_index_index>
-				<observers>
-					<popov_seo_cms_observer>
-						<type>singleton</type>
-						<class>Popov_Seo_Model_Observer</class>
-						<method>hookTo8080Port</method>
-					</popov_seo_cms_observer>
-				</observers>
-			</controller_action_layout_render_before_cms_index_index>
-            <catalog_helper_output_construct>
-                <observers>
-                    <m_seo_observer_attributes>
-                        <type>singleton</type>
-                        <class>popov_seo/observer</class>
-                        <method>hookCustomAttributeOutputHandler</method>
-                    </m_seo_observer_attributes>
-                </observers>
-            </catalog_helper_output_construct>
-		</events>
-
 	</global>
 
 	<frontend>
@@ -148,6 +80,83 @@
 				</Popov_Seo>
 			</modules>
 		</translate>
+
+        <events>
+            <!-- this name is really important, use this to indicate the layout-render-before event -->
+            <!--<controller_action_layout_render_before_catalog_category_view>
+                <observers>
+                    <popov_seo_meta_tags_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>hookToChangeMetaTags</method>
+                    </popov_seo_meta_tags_observer>
+                </observers>
+            </controller_action_layout_render_before_catalog_category_view>-->
+            <!--<controller_action_layout_render_before>
+                <observers>
+                    <popov_seo_meta_tags_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>hookToChangeMetaTags</method>
+                    </popov_seo_meta_tags_observer>
+                </observers>
+            </controller_action_layout_render_before>
+            <controller_action_layout_render_before_catalog_product_view>
+                <observers>
+                    <popov_seo_meta_tags_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>hookToChangeMetaTags</method>
+                    </popov_seo_meta_tags_observer>
+                </observers>
+            </controller_action_layout_render_before_catalog_product_view>-->
+            <controller_action_predispatch>
+                <observers>
+                    <popov_seo_predispatch_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>controllerActionPredispatch</method>
+                    </popov_seo_predispatch_observer>
+                </observers>
+            </controller_action_predispatch>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <popov_seo_generate_blocks_after_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>hookAfterGenerateBlocks</method>
+                    </popov_seo_generate_blocks_after_observer>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+            <controller_action_layout_render_before_cms_index_index>
+                <observers>
+                    <popov_seo_cms_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>hookTo8080Port</method>
+                    </popov_seo_cms_observer>
+                </observers>
+            </controller_action_layout_render_before_cms_index_index>
+            <catalog_helper_output_construct>
+                <observers>
+                    <m_seo_observer_attributes>
+                        <type>singleton</type>
+                        <class>popov_seo/observer</class>
+                        <method>hookCustomAttributeOutputHandler</method>
+                    </m_seo_observer_attributes>
+                </observers>
+            </catalog_helper_output_construct>
+            <!--<core_block_abstract_to_html_after>-->
+            <controller_front_send_response_before>
+                <observers>
+                    <popov_seo_block_abstract_to_html_after_observer>
+                        <type>singleton</type>
+                        <class>Popov_Seo_Model_Observer</class>
+                        <method>hookHtmlContent</method>
+                    </popov_seo_block_abstract_to_html_after_observer>
+                </observers>
+            </controller_front_send_response_before>
+        </events>
 	</frontend>
 
 	<!-- is important place this code (<adminhtml/>) in config.xml if you wand place this in adminhtml.xml nothing happen -->

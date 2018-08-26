@@ -46,6 +46,12 @@ class Popov_Seo_Model_Observer extends Varien_Event_Observer
 		}
 	}
 
+	public function hookHtmlContent($observer) {
+		//if (!Mage::app()->getStore()->isAdmin()) {
+			$this->getSeoHelper()->prepareLinks($observer->getFront()->getResponse());
+		//}
+	}
+
     public function hookCustomAttributeOutputHandler(Varien_Event_Observer $observer)
     {
         // @todo attach category helper attribute handler

@@ -403,22 +403,24 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 
         $filter = $this->getFilterHelper();
 
-        if (Mage::getStoreConfig('popov_seo/settings/trailing_slash')) {
-            $regexp = "/<a(.*?)href=\"(.*?)\"(.*?)>/";
-            $html = preg_replace_callback($regexp, function ($matches) use ($filter) {
-                list($full, $attrsBefore, $href, $attrsAfter) = $matches;
-                // There is no needs add all filters for lower case URLs, multiple slashes and etc.
-                // You can but more exceptable way will be fix it in root of problem,
-                // such as change URL with upper case simbols through admin panel
+        $regexp = "/<(a|option)(.*?)(href|value)=\"(.*?)\"(.*?)>/";
+        $html = preg_replace_callback($regexp, function ($matches) use ($filter) {
+            list($full, $tag, $attrsBefore, $hrefAttr, $href, $attrsAfter) = $matches;
+            // There is no needs add all filters for lower case URLs, multiple slashes and etc.
+            // You can but more exceptable way will be fix it in root of problem,
+            // such as change URL with upper case simbols through admin panel
+            if ($filter->allowHideDefaultStoreCode()) {
+                $href = $filter->defaultStoreCode($href);
+            }
+            if ($filter->allowRemoveTrailingSlash()) {
                 $href = $filter->trailingSlash($href);
-                $href = sprintf('<a%shref="%s"%s>', $attrsBefore, $href, $attrsAfter);
+            }
+            $href = sprintf('<%s%s%s="%s"%s>', $tag, $attrsBefore, $hrefAttr, $href, $attrsAfter);
 
-                return $href;
-            }, $response->getBody());
+            return $href;
+        }, $response->getBody());
 
-            $response->setBody($html);
-        }
-
+        $response->setBody($html);
     }
 
 	/**

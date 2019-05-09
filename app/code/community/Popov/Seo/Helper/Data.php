@@ -403,7 +403,7 @@ class Popov_Seo_Helper_Data extends Mage_Core_Helper_Abstract
 
         $filter = $this->getFilterHelper();
 
-        $regexp = "/<(a|option)(.*?)(href|value)=\"(.*?)\"(.*?)>/";
+        $regexp = "/<(a|link|option)(.*?)(href|value)=\"(.*?)\"(.*?)>/";
         $html = preg_replace_callback($regexp, function ($matches) use ($filter) {
             list($full, $tag, $attrsBefore, $hrefAttr, $href, $attrsAfter) = $matches;
             // There is no needs add all filters for lower case URLs, multiple slashes and etc.
